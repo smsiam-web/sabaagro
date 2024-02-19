@@ -9,13 +9,13 @@ const nextConfig = {
   //   appDir: true,
   // },
   env: {
-    FIREBASE_API_KEY: "AIzaSyCwlmCftGAJuPHWJosjrHRhU84iSiudjfM",
-    FIREBASE_AUTH_DOMAIN: "rajshahiraamwala-8b7bf.firebaseapp.com",
-    FIREBASE_PROJECT_ID: "rajshahiraamwala-8b7bf",
-    FIREBASE_STORAGE_BUCKET: "rajshahiraamwala-8b7bf.appspot.com",
-    FIREBASE_MESSAGING_SENDER_ID: "38548299757",
-    FIREBASE_APP_ID: "1:38548299757:web:ea6e60638def1036a511e4",
-    FIREBASE_MEASUREMENT_ID: "G-2BZJP3PX28",
+    FIREBASE_API_KEY: "AIzaSyC-aU7h07Sd7N1VfnKhhbHsqEo0C9_adGY",
+    FIREBASE_AUTH_DOMAIN: "sabaagro-2607.firebaseapp.com",
+    FIREBASE_PROJECT_ID: "sabaagro-2607",
+    FIREBASE_STORAGE_BUCKET: "sabaagro-2607.appspot.com",
+    FIREBASE_MESSAGING_SENDER_ID: "672390000303",
+    FIREBASE_APP_ID: "1:672390000303:web:531b45f820f76b01cb6e5a",
+    FIREBASE_MEASUREMENT_ID: "G-ETT6LWZ4E5",
   },
 };
 
