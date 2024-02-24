@@ -26,7 +26,7 @@ const Setting = () => {
   const [config, setConfig] = useState(useSelector(selectConfig) || null);
   const router = useRouter();
 
-  const lastUpdate = ToDateAndTime(config[0].created_at);
+  const lastUpdate = ToDateAndTime(config && config[0]?.created_at);
   let today = new Date();
 
   // place product handler on submit

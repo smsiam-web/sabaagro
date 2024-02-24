@@ -20,13 +20,13 @@ const HomeHero = () => {
           >
             <div className="flex flex-col justify-between h-full">
               <div className="">
-                <h2 className="capitalize text-shadow leading-10 text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold pb-6 md:pb-8 lg:pb-10 text-white">
+                {/* <h2 className="capitalize text-shadow leading-10 text-2xl sm:text-2xl md:text-3xl lg:text-4xl font-extrabold pb-6 md:pb-8 lg:pb-10 text-white">
                   রসালো আমের সাথে <br /> সতেজ গ্রীষ্মকাল
                 </h2>
                 <p className="text-md text-gray-100">
                   সকল প্রকার ফর্মালিন বা কেমিক্যাল মুক্ত আম নিন এবং <br />
                   আপনার সন্তান ও পরিবারকে সুরক্ষিত রাখুন
-                </p>
+                </p> */}
               </div>
               <Link
                 href="/shop"

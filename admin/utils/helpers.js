@@ -135,9 +135,9 @@ export const TimeStampToDate = (itmestamp) => {
 };
 
 export const ToDateAndTime = (itmestamp) => {
-  let date = itmestamp.toDate();
-  let dateStr = date.toDateString();
-  let timeStr = date.toLocaleTimeString([], {
+  let date = itmestamp?.toDate();
+  let dateStr = date?.toDateString();
+  let timeStr = date?.toLocaleTimeString([], {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,

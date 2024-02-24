@@ -44,7 +44,7 @@ p {
         rgba(0, 0, 0, 0.473),
         rgba(0, 0, 0, 0)
       ),
-      url("/cover.jpg");
+      url("/saba_agro_cover.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -55,7 +55,7 @@ p {
         rgba(0, 0, 0, 0.438),
         rgba(0, 0, 0, 0)
       ),
-      url("/cover_m.jpg");
+      url("/saba_agro_cover.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
