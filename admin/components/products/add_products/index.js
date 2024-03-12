@@ -21,7 +21,6 @@ const validationSchema = Yup.object().shape({
     .label("Product details"),
   parent_category: Yup.string().required().label("Select parent category"),
   product_type: Yup.string().required().label("Select type"),
-  available_from: Yup.date().required().label("Select Date"),
   unit: Yup.string().required().label("Unit"),
   stock: Yup.number().required().label("Quantity"),
   price: Yup.number().required().label("Price"),
@@ -66,7 +65,6 @@ const AddProduts = ({ onClick }) => {
       productImg,
       product_details: values,
       isPublished: false,
-      weight: 12,
       off_price,
       timestamp,
     });
@@ -87,7 +85,6 @@ const AddProduts = ({ onClick }) => {
             stock: product_details?.stock || "",
             price: product_details?.price || "",
             sale_price: product_details?.sale_price || "",
-            available_from: product_details?.available_from || "",
             product_tag: product_details?.product_tag || "",
           }}
           onSubmit={placeProduct}

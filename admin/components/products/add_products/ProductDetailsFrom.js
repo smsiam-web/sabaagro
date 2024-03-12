@@ -52,14 +52,7 @@ const ProductDetailsFrom = () => {
           items={TCATEGORY}
         />
       </div>
-      <div>
-        <span>Delivery Date</span>
-        <FormInput
-          type="date"
-          name="available_from"
-          placeholder="Available From"
-        />
-      </div>
+
       <div>
         <span>Unit (kg/pc/lb/ml/g...etc)</span>
         <FormInput name="unit" placeholder="Unit" />

@@ -5,7 +5,7 @@ import Category from "../../../admin/components/category";
 const Categorys = () => {
   return (
     <AdminLayout>
-      <Category />
+      <Category/>
     </AdminLayout>
   );
 };
