@@ -15,7 +15,6 @@ const validationSchema = Yup.object().shape({
   category_title: Yup.string().required().label("Category Title"),
   category_child: Yup.string().required().label("Child Category"),
   category_path: Yup.string().required().label("Category Path"),
-  category_type: Yup.string().required().label("Select type"),
   category_uid: Yup.string().label("Select type"),
 });
 
@@ -61,7 +60,6 @@ const AddCategory = ({ onClick }) => {
             category_title: "",
             category_child: "",
             category_path: "",
-            category_type: "",
             category_uid: (uid && uid) || "",
           }}
           onSubmit={placeCategory}

@@ -6,11 +6,13 @@ import {
   Modal,
   Tooltip,
   Drawer,
+  TagsInput,
 } from "@mantine/core";
 import { RxCross2 } from "react-icons/rx";
 import { CgCheck } from "react-icons/cg";
 import { FiEdit } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { MdOutlineAddBusiness } from "react-icons/md";
 import { db } from "@/app/utils/firebase";
 import { updateCategory } from "@/app/redux/slices/categorySlice";
 import { useDispatch } from "react-redux";
@@ -29,6 +31,8 @@ const CategoryItem = () => {
   const [filterCategory, setFilterCategory] = useState(null);
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
+
+  console.log(category);
 
   const toggleDrawer = (item) => {
     isOpen ? setIsOpen(false) : setIsOpen(true);
@@ -132,6 +136,21 @@ const CategoryItem = () => {
   return (
     <>
       <Modal
+        opened={false}
+        onClose={close}
+        centered
+        zIndex={99999}
+        withCloseButton={false}
+        size="lg"
+        padding={0}
+      >
+        <div className="px-16 py-12 pb-0 flex flex-col items-center text-center gap-3">
+          <h2 className="text-xl font-bold">ফলের চারা</h2>
+          <span className="text-sm font-bold">0a50cc4744e78c3a</span>
+          <span>Add Children</span>
+        </div>
+      </Modal>
+      <Modal
         opened={opened}
         onClose={close}
         centered
@@ -190,7 +209,6 @@ const CategoryItem = () => {
                 <td className="px-4 py-3 ">Icon</td>
                 <td className="px-4 py-3 ">PARENT</td>
                 <td className="px-4 py-3 ">CHILDREN</td>
-                <td className="px-4 py-3 ">TYPE</td>
                 <td className="px-4 py-3 ">PUBLISHED</td>
                 <td className="px-4 py-3 ">ACTIONS</td>
               </tr>
@@ -226,14 +244,20 @@ const CategoryItem = () => {
                             </span>
                           </td>
                           <td className="px-4 py-3">
-                            <span className="text-sm font-semibold">
-                              {item?.category_child}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3">
-                            <span className="text-sm font-semibold">
-                              {item?.category_type}
-                            </span>
+                            <div className="text-sm font-semibold flex justify-center gap-5 text-sub-title items-center">
+                              <Tooltip
+                                label="Add Children"
+                                color="blue"
+                                withArrow
+                              >
+                                <span
+                                  onClick={() => toggleDrawer(item)}
+                                  className="cursor-pointer hover:text-blue-400"
+                                >
+                                  <MdOutlineAddBusiness size={24} />
+                                </span>
+                              </Tooltip>
+                            </div>
                           </td>
 
                           <td className="px-4 py-3">

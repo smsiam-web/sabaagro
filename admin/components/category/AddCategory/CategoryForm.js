@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import FileUpload from "@/app/components/shared/FileUpload";
 import { FormInput } from "../../shared/Form";
 
-const CategoryForm = ({uid, urls}) => {
+const CategoryForm = ({ uid, urls }) => {
   const formInitial = {
     thumbImage: "",
   };
@@ -33,7 +33,7 @@ const CategoryForm = ({uid, urls}) => {
       <div>
         <span className="lable">Category Image</span>
         <FormInput
-        disabled
+          disabled
           value={urls}
           name="category_image"
           placeholder="Category Icon URL"
@@ -55,10 +55,6 @@ const CategoryForm = ({uid, urls}) => {
       <div>
         <span className="lable">Category Path</span>
         <FormInput name="category_path" placeholder="link" />
-      </div>
-      <div>
-        <span className="lable">Category Type</span>
-        <FormInput name="category_type" placeholder="Food / Fruits ..." />
       </div>
       <div>
         <span className="lable">Uid</span>

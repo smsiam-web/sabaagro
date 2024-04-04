@@ -45,7 +45,7 @@ const Dashboard = () => {
         {/* cover image  */}
         <div className="h-2/5 relative">
           <img
-            src="/cover.png"
+            src="/saba_agro_cover.jpg"
             alt=""
             className="w-full object-top rounded-md"
           />

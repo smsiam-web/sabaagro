@@ -14,7 +14,7 @@ const UpdateAddress = () => {
   const UPAZILAS = Upazilas[2].data;
   const UNIONS = Unions[2].data;
 
-  // console.log(UPAZILAS);
+  console.log(filterID);
 
   const [city, setCity] = useState(CITY);
   const [upazila, setUpazila] = useState(UPAZILAS);

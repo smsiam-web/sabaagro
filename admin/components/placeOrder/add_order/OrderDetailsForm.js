@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Tabs } from "@mantine/core";
 import { AppTextArea, FormInput, FormRadio } from "../../shared/Form";
 import { db } from "@/app/utils/firebase";
+import SearchSuggestions from "../../../utils/SearchSuggestions";
 
 const OrderDetailsForm = () => {
   const [khejurGur, setKhejurGur] = useState(null);
@@ -21,26 +22,28 @@ const OrderDetailsForm = () => {
         const others = [];
         snap.docs.map((doc) => {
           doc.data().product_details.parent_category === "খেজুরের গুড়" &&
-          khejur.push({
+            khejur.push({
               ...doc.data().product_details,
             });
-            doc.data().product_details.parent_category === "মধু" &&
+          doc.data().product_details.parent_category === "মধু" &&
             honeys.push({
-                ...doc.data().product_details,
-              });
-            doc.data().product_details.parent_category === "মশলা গুঁড়া" &&
+              ...doc.data().product_details,
+            });
+          doc.data().product_details.parent_category === "মশলা গুঁড়া" &&
             moslagura.push({
-                ...doc.data().product_details,
-              });
-           ( doc.data().product_details.parent_category === "সরিষার তেল" || doc.data().product_details.parent_category === "ঘি" || doc.data().product_details.parent_category === "কুমড়া বড়ি") &&
+              ...doc.data().product_details,
+            });
+          (doc.data().product_details.parent_category === "সরিষার তেল" ||
+            doc.data().product_details.parent_category === "ঘি" ||
+            doc.data().product_details.parent_category === "কুমড়া বড়ি") &&
             others.push({
-                ...doc.data().product_details,
-              });
+              ...doc.data().product_details,
+            });
         });
         setKhejurGur(khejur);
         setHoney(honeys);
         setMosla(moslagura);
-        setOthers(others)
+        setOthers(others);
       });
 
     return () => {
@@ -60,7 +63,6 @@ const OrderDetailsForm = () => {
         />
       </div>
       <div>
-        
         <span>Phone Number</span>
         <FormInput
           type="text"
@@ -114,7 +116,7 @@ const OrderDetailsForm = () => {
           </Tabs.Panel>
 
           <Tabs.Panel value="others" pt="xs">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {other?.map((i) => (
                 <div
                   key={i.yup}
@@ -135,7 +137,7 @@ const OrderDetailsForm = () => {
           </Tabs.Panel>
 
           <Tabs.Panel value="honey" pt="xs">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {honey?.map((i) => (
                 <div
                   key={i.yup}
@@ -155,7 +157,7 @@ const OrderDetailsForm = () => {
             </div>
           </Tabs.Panel>
           <Tabs.Panel value="mosla" pt="xs">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {mosla?.map((i) => (
                 <div
                   key={i.yup}
@@ -176,6 +178,7 @@ const OrderDetailsForm = () => {
           </Tabs.Panel>
         </Tabs>
       </div>
+
       <div className="mt-3">
         <span>Price</span>
         <FormInput type="number" name="salePrice" placeholder="Price" />
