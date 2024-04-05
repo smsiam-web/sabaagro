@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AppTextArea, FormDropdown, FormInput } from "../../shared/Form";
-import { PCATEGORY, CCATEGORY, TCATEGORY } from "@/admin/configs";
+import { TCATEGORY } from "@/admin/configs";
 import FileUpload from "../../shared/FileUP";
 import { useSelector } from "react-redux";
 import { selectCategory } from "@/app/redux/slices/categorySlice";

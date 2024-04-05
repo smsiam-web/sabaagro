@@ -21,6 +21,7 @@ import Image from "next/image";
 import { useDisclosure } from "@mantine/hooks";
 import Button from "../shared/Button";
 import CategoryAction from "./CategoryAction";
+import Link from "next/link";
 
 const CategoryItem = () => {
   const theme = useMantineTheme();
@@ -134,21 +135,6 @@ const CategoryItem = () => {
   return (
     <>
       <Modal
-        opened={false}
-        onClose={close}
-        centered
-        zIndex={99999}
-        withCloseButton={false}
-        size="lg"
-        padding={0}
-      >
-        <div className="px-16 py-12 pb-0 flex flex-col items-center text-center gap-3">
-          <h2 className="text-xl font-bold">ফলের চারা</h2>
-          <span className="text-sm font-bold">0a50cc4744e78c3a</span>
-          <span>Add Children</span>
-        </div>
-      </Modal>
-      <Modal
         opened={opened}
         onClose={close}
         centered
@@ -242,20 +228,21 @@ const CategoryItem = () => {
                             </span>
                           </td>
                           <td className="px-4 py-3">
-                            <div className="text-sm font-semibold flex justify-center gap-5 text-sub-title items-center">
-                              <Tooltip
-                                label="Add Children"
-                                color="blue"
-                                withArrow
-                              >
-                                <span
-                                  onClick={() => toggleDrawer(item)}
-                                  className="cursor-pointer hover:text-blue-400"
+                            <Link
+                              href={`/admin/category/id=${item.category_uid}`}
+                            >
+                              <div className="text-sm font-semibold flex justify-center gap-5 text-sub-title items-center">
+                                <Tooltip
+                                  label="Add Children"
+                                  color="blue"
+                                  withArrow
                                 >
-                                  <MdOutlineAddBusiness size={24} />
-                                </span>
-                              </Tooltip>
-                            </div>
+                                  <span className="cursor-pointer hover:text-blue-400">
+                                    <MdOutlineAddBusiness size={24} />
+                                  </span>
+                                </Tooltip>
+                              </div>
+                            </Link>
                           </td>
 
                           <td className="px-4 py-3">
