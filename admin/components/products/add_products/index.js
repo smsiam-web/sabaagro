@@ -39,7 +39,6 @@ const AddProduts = ({ onClick }) => {
 
   const productImg = useSelector(selectProductImg);
   const ProductID = useSelector(selectUpdateProductId);
-  // const ID = "b99ffeca77b2532e";
 
   // place product handler on submit
   const placeProduct = async (values) => {

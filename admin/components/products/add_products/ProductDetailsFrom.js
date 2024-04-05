@@ -1,9 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AppTextArea, FormDropdown, FormInput } from "../../shared/Form";
 import { PCATEGORY, CCATEGORY, TCATEGORY } from "@/admin/configs";
 import FileUpload from "../../shared/FileUP";
+import { useSelector } from "react-redux";
+import { selectCategory } from "@/app/redux/slices/categorySlice";
+import { selectChildCategory } from "@/app/redux/slices/childCategorySlice";
 
 const ProductDetailsFrom = () => {
+  const [childCategory, setChildCategory] = useState();
+  const Category = useSelector(selectCategory);
+  const ChildCategory = useSelector(selectChildCategory);
+
+  useEffect(() => {
+    setChildCategory(ChildCategory[0]);
+  }, [ChildCategory]);
+
+  const CATEGORY = [];
+
+  Category.map((i) => {
+    const cat = {
+      name: i.category_title,
+      id: i.category_title,
+      path: i.category_path,
+      child: [i.category_child.map((x) => ({ name: x, id: x }))],
+    };
+
+    i.isPublished && CATEGORY.push(cat);
+  });
+
   return (
     <div className="max-h-full">
       <div>
@@ -33,7 +57,7 @@ const ProductDetailsFrom = () => {
         <FormDropdown
           name="parent_category"
           placeholder="Select parent category"
-          items={PCATEGORY}
+          items={CATEGORY}
         />
       </div>
       <div>
@@ -41,7 +65,7 @@ const ProductDetailsFrom = () => {
         <FormDropdown
           name="child_category"
           placeholder="Select child category"
-          items={CCATEGORY}
+          items={childCategory}
         />
       </div>
       <div>

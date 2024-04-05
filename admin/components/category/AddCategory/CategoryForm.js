@@ -50,7 +50,11 @@ const CategoryForm = ({ uid, urls }) => {
       </div>
       <div>
         <span className="lable">Child Category</span>
-        <FormInput name="category_child" placeholder="Select child category" />
+        <FormInput
+          type="array"
+          name="category_child"
+          placeholder="Select child category"
+        />
       </div>
       <div>
         <span className="lable">Category Path</span>

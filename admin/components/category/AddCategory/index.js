@@ -24,14 +24,13 @@ const AddCategory = ({ onClick }) => {
   const uid = uuid();
   const tempImgUrl = useSelector(selectTempUrl);
 
-
   // place product handler on submit
   const placeCategory = async (values) => {
     setLoading(true);
-    console.log({...values, category_image: tempImgUrl});
+    console.log({ ...values, category_image: tempImgUrl });
     const category_uid = values?.category_uid;
     await placeCategoryHandler(values, category_uid);
-    // dispatch(updateBasket([]));
+
     setLoading(false);
     //clear previous url
     dispatch(updateTempImgUrl([]));
@@ -49,13 +48,19 @@ const AddCategory = ({ onClick }) => {
     await db
       .collection("category")
       .doc(category_uid)
-      .set({...values, category_image: tempImgUrl, timestamp, isPublished: false});
+      .set({
+        ...values,
+        category_child: [values.category_child],
+        category_image: tempImgUrl,
+        timestamp,
+        isPublished: false,
+      });
   };
   return (
     <main>
       <div>
         <AppForm
-          initialValues={ {
+          initialValues={{
             category_image: "",
             category_title: "",
             category_child: "",

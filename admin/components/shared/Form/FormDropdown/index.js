@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import styles from "./FormDropdown.module.css";
 import { ScrollArea, Collapse } from "@mantine/core";
+import { updateChildCategory } from "@/app/redux/slices/childCategorySlice";
 
 function FormDropdown({
   items,
@@ -19,10 +20,14 @@ function FormDropdown({
 
   const toggleDropdown = () => setOpen(!isOpen);
   const dispatch = useDispatch();
-  const handleItemClick = (id) => {
+
+  const handleItemClick = (id, v, child) => {
     switch (name) {
       case "state":
         dispatch(updateAddId({ name: "division", id: id }));
+        break;
+      case "parent_category":
+        dispatch(updateChildCategory(child));
         break;
       case "city":
         dispatch(updateAddId({ name: "city", id: id }));
@@ -50,12 +55,11 @@ function FormDropdown({
 
             <img
               className={`${styles.icon} ${isOpen && styles.open}`}
-              src="/raj_aam_wala.jpg"
+              src="/sabaagro_logo.jpg"
               loading="lazy"
               alt=""
               width={13}
-              />
-         
+            />
           </div>
           <Collapse
             in={isOpen}
@@ -69,7 +73,9 @@ function FormDropdown({
                       <div
                         key={item.id}
                         className="justify-between py-2 pl-4 transition-colors duration-150 hover:bg-gray-100 text-gray-500 hover:text-green-500 "
-                        onClick={() => handleItemClick(item.id, item?.value)}
+                        onClick={() =>
+                          handleItemClick(item.id, item?.value, item?.child)
+                        }
                         id={item[key]}
                       >
                         <span

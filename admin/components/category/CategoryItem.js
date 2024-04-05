@@ -32,8 +32,6 @@ const CategoryItem = () => {
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
 
-  console.log(category);
-
   const toggleDrawer = (item) => {
     isOpen ? setIsOpen(false) : setIsOpen(true);
     setFilterCategory(item);
