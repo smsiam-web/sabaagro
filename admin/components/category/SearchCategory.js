@@ -7,7 +7,7 @@ import AddCategory from "./AddCategory";
 import { useDispatch } from "react-redux";
 import { updateTempImgUrl } from "@/app/redux/slices/tempImgUrl";
 
-const SearchCategory = () => {
+const SearchCategory = ({ addtitle }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const dispatch = useDispatch();
   //clear tempUrl when close the drawer
@@ -86,7 +86,7 @@ const SearchCategory = () => {
             <div className="w-full md:w-56 lg:w-56 xl:w-56">
               <Button
                 onClick={open}
-                title="Add Category"
+                title={addtitle}
                 className="bg-blue-400 hover:bg-blue-500 hover:shadow-lg transition-all duration-300 text-white w-full h-14"
                 icon=<BiPlus size={24} />
               />

@@ -9,7 +9,7 @@ const Button = ({
   ...rest
 }) => {
   return (
-    <button className={`font-bold px-6 py-4 rounded ${className}`} {...rest}>
+    <button className={`font-bold px-5 py-4 rounded ${className}`} {...rest}>
       {loading ? (
         <Loader color="gray" size="sm" className="mx-auto" />
       ) : icon ? (
