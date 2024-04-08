@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import styles from "./FormDropdown.module.css";
 import { ScrollArea, Collapse } from "@mantine/core";
 import { updateChildCategory } from "@/app/redux/slices/childCategorySlice";
+import { db } from "@/app/utils/firebase";
 
 function FormDropdown({
   items,
@@ -21,13 +22,31 @@ function FormDropdown({
   const toggleDropdown = () => setOpen(!isOpen);
   const dispatch = useDispatch();
 
-  const handleItemClick = (id, v, child) => {
+  const updateChild = async (uid) => {
+    await db
+      .collection("category")
+      .doc("childCategory")
+      .collection(uid)
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snap) => {
+        const childCategory = [];
+        snap.docs.map((doc) => {
+          doc.data().isPublished &&
+            childCategory.push({
+              ...doc.data(),
+            });
+        });
+        dispatch(updateChildCategory(childCategory));
+      });
+  };
+
+  const handleItemClick = (id, v, uid) => {
     switch (name) {
       case "state":
         dispatch(updateAddId({ name: "division", id: id }));
         break;
       case "parent_category":
-        dispatch(updateChildCategory(child));
+        updateChild(uid);
         break;
       case "city":
         dispatch(updateAddId({ name: "city", id: id }));
@@ -74,7 +93,7 @@ function FormDropdown({
                         key={item.id}
                         className="justify-between py-2 pl-4 transition-colors duration-150 hover:bg-gray-100 text-gray-500 hover:text-green-500 "
                         onClick={() =>
-                          handleItemClick(item.id, item?.value, item?.child)
+                          handleItemClick(item.id, item?.value, item?.uid)
                         }
                         id={item[key]}
                       >

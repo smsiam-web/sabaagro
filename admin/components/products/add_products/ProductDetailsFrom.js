@@ -12,17 +12,16 @@ const ProductDetailsFrom = () => {
   const ChildCategory = useSelector(selectChildCategory);
 
   useEffect(() => {
-    setChildCategory(ChildCategory[0]);
+    setChildCategory(ChildCategory);
   }, [ChildCategory]);
 
   const CATEGORY = [];
-
   Category.map((i) => {
     const cat = {
-      name: i.category_title,
-      id: i.category_title,
-      path: i.category_path,
-      child: [i.category_child.map((x) => ({ name: x, id: x }))],
+      uid: i?.category_uid,
+      name: i?.category_title,
+      id: i?.category_title,
+      path: i?.category_path,
     };
 
     i.isPublished && CATEGORY.push(cat);
