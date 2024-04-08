@@ -254,6 +254,7 @@ const SingleCAtegory = () => {
                   <td className="px-4 py-3 ">ID</td>
                   <td className="px-4 py-3 ">PARENT</td>
                   <td className="px-4 py-3 ">CHILDREN</td>
+                  <td className="px-4 py-3 ">Product</td>
                   <td className="px-4 py-3 ">Published</td>
                   <td className="px-4 py-3 ">ACTIONS</td>
                 </tr>
@@ -271,6 +272,11 @@ const SingleCAtegory = () => {
                       <td className="px-4 py-3">#{i?.uid}</td>
                       <td className="px-4 py-3">{i?.parent_category_title}</td>
                       <td className="px-4 py-3">{i?.name}</td>
+                      <td className="px-4 py-3">
+                        <h1 className="text-base bg-violet-300 w-fit px-2 py-1 rounded-2xl font-bold text-violet-700">
+                          23
+                        </h1>
+                      </td>
                       <td className="px-4 py-3">
                         <span className="text-sm font-semibold">
                           <Group position="center">
