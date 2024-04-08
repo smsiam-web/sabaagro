@@ -6,7 +6,6 @@ import {
   Modal,
   Tooltip,
   Drawer,
-  TagsInput,
 } from "@mantine/core";
 import { RxCross2 } from "react-icons/rx";
 import { CgCheck } from "react-icons/cg";
@@ -60,6 +59,16 @@ const CategoryItem = () => {
       .catch((error) => {
         console.error("Error removing document: ", error);
       });
+    await db
+      .collection("category")
+      .doc("childCategory")
+      .collection(item.category_uid)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          doc.ref.delete();
+        });
+      });
     close();
     setFilterCategory(null);
   };
@@ -110,7 +119,7 @@ const CategoryItem = () => {
       });
   };
 
-  // Get order from firebase database
+  // Get category from firebase database
   useEffect(() => {
     setLoading(true);
     const unSub = db
@@ -246,7 +255,7 @@ const CategoryItem = () => {
                           </td>
 
                           <td className="px-4 py-3">
-                            <span className="text-sm font-semibold">
+                            <span className="text-sm font-semibold cursor-pointer">
                               <Group position="center">
                                 <Switch
                                   className="cursor-pointer"

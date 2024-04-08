@@ -27,9 +27,9 @@ const AddCategory = ({ onClick }) => {
   // place product handler on submit
   const placeCategory = async (values) => {
     setLoading(true);
-    console.log({ ...values, category_image: tempImgUrl });
     const category_uid = values?.category_uid;
     await placeCategoryHandler(values, category_uid);
+    await placeChildCategoryHandler(values, category_uid);
 
     setLoading(false);
     //clear previous url
@@ -50,10 +50,28 @@ const AddCategory = ({ onClick }) => {
       .doc(category_uid)
       .set({
         ...values,
-        category_child: [values.category_child],
         category_image: tempImgUrl,
         timestamp,
         isPublished: false,
+      });
+  };
+
+  // save order details on firebase database
+  const placeChildCategoryHandler = async (values, category_uid) => {
+    await db
+      .collection("category")
+      .doc("childCategory")
+      .collection(category_uid)
+      .doc(uid)
+      .set({
+        child_category_path: values.category_path,
+        parent_category_title: values.category_title,
+        parent_category_uid: values.category_uid,
+        name: values.category_child,
+        id: values.category_child,
+        timestamp,
+        isPublished: false,
+        uid: uid,
       });
   };
   return (

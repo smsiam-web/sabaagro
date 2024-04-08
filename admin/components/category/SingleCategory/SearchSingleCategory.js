@@ -3,12 +3,11 @@ import { BiPlus } from "react-icons/bi";
 import { useDisclosure } from "@mantine/hooks";
 import { Drawer } from "@mantine/core";
 import React, { useEffect } from "react";
-import AddCategory from "./AddCategory";
 import { useDispatch } from "react-redux";
 import { updateTempImgUrl } from "@/app/redux/slices/tempImgUrl";
-import SingleCategoryForm from "./SingleCategory/AddSingleCategory/SingleCategoryForm";
+import AddSingleCategory from "./AddSingleCategory";
 
-const SearchCategory = () => {
+const SearchSingleCategory = ({ item }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const dispatch = useDispatch();
   //clear tempUrl when close the drawer
@@ -29,7 +28,7 @@ const SearchCategory = () => {
           size="lg"
           padding={0}
         >
-          <AddCategory onClick={close} />
+          <AddSingleCategory onClick={close} item={item} />
         </Drawer>
       </div>
       <div className="min-w-0 rounded-lg overflow-hidden bg-gray-50  shadow-xs  mb-5">
@@ -87,7 +86,7 @@ const SearchCategory = () => {
             <div className="w-full md:w-56 lg:w-56 xl:w-56">
               <Button
                 onClick={open}
-                title="Add Category"
+                title="Add Single Category"
                 className="bg-blue-400 hover:bg-blue-500 hover:shadow-lg transition-all duration-300 text-white w-full h-14"
                 icon=<BiPlus size={24} />
               />
@@ -99,4 +98,4 @@ const SearchCategory = () => {
   );
 };
 
-export default SearchCategory;
+export default SearchSingleCategory;
