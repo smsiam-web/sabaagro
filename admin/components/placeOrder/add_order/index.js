@@ -110,8 +110,8 @@ const AddOrder = ({ onClick }) => {
   const placeOrder = async (values) => {
     setLoading(true);
     const invoice_id = Number(uid?.invoice_id) + 1;
-    const invoice_str = `RA0${invoice_id}`;
-    const cusetomer_id = `RAC0${invoice_id}`;
+    const invoice_str = `SA0${invoice_id}`;
+    const cusetomer_id = `SAC0${invoice_id}`;
     await updateInvoiceID(invoice_id);
 
     const order = [];
@@ -156,76 +156,76 @@ const AddOrder = ({ onClick }) => {
 
     const date = Today();
 
-    try {
-      // Set your API key and secret key
-      const apiKey = config[0]?.values.sfc_api_key;
-      const secretKey = config[0]?.values.sfc_secret_key;
+    // try {
+    //   // Set your API key and secret key
+    //   const apiKey = config[0]?.values.sfc_api_key;
+    //   const secretKey = config[0]?.values.sfc_secret_key;
 
-      // Prepare headers for the request
-      const headers = new Headers();
-      headers.append("Api-Key", apiKey);
-      headers.append("Secret-Key", secretKey);
-      headers.append("Content-Type", "application/json");
+    //   // Prepare headers for the request
+    //   const headers = new Headers();
+    //   headers.append("Api-Key", apiKey);
+    //   headers.append("Secret-Key", secretKey);
+    //   headers.append("Content-Type", "application/json");
 
-      const orderData = {
-        cod_amount: `${values.salePrice}`,
-        invoice: `${invoice_str}`,
-        note: `${values.note}`,
-        recipient_address: `${values.customer_address}`,
-        recipient_name: `${values.customer_name}`,
-        recipient_phone: `${values.phone_number}`,
-      };
+    //   const orderData = {
+    //     cod_amount: `${values.salePrice}`,
+    //     invoice: `${invoice_str}`,
+    //     note: `${values.note}`,
+    //     recipient_address: `${values.customer_address}`,
+    //     recipient_name: `${values.customer_name}`,
+    //     recipient_phone: `${values.phone_number}`,
+    //   };
 
-      // Make the POST request
-      const response = await fetch(
-        "https://portal.steadfast.com.bd/api/v1/create_order",
-        {
-          method: "POST",
-          headers: headers,
-          body: JSON.stringify(orderData),
-        }
-      );
+    //   // Make the POST request
+    //   const response = await fetch(
+    //     "https://portal.steadfast.com.bd/api/v1/create_order",
+    //     {
+    //       method: "POST",
+    //       headers: headers,
+    //       body: JSON.stringify(orderData),
+    //     }
+    //   );
 
-      // Handle the response
-      const data = await response.json();
-      console.log(data);
-      await placeOrderHandler(
-        data,
-        deliveryCrg,
-        weight,
-        values,
-        discount,
-        totalPrice,
-        date,
-        order,
-        invoice_str,
-        timestamp
-      );
-      await sendConfirmationMsg(
-        values,
-        invoice_str,
-        data?.consignment.tracking_code,
-      );
+    //   // Handle the response
+    //   const data = await response.json();
+    //   console.log(data);
+    //   await placeOrderHandler(
+    //     data,
+    //     deliveryCrg,
+    //     weight,
+    //     values,
+    //     discount,
+    //     totalPrice,
+    //     date,
+    //     order,
+    //     invoice_str,
+    //     timestamp
+    //   );
+    //   await sendConfirmationMsg(
+    //     values,
+    //     invoice_str,
+    //     data?.consignment.tracking_code,
+    //   );
 
-      // You can update the state or perform other actions based on the response
-      // For example, if using React with state:
-    } catch (error) {
+    //   // You can update the state or perform other actions based on the response
+    //   // For example, if using React with state:
+    // } catch (error) {
 
-     await isFailedPlaceOrderHandler(
-        deliveryCrg,
-        weight,
-        values,
-        discount,
-        totalPrice,
-        date,
-        order,
-        invoice_str,
-        timestamp
-      );
-      await sendConfirmationMsg(values, invoice_str);
+    await isFailedPlaceOrderHandler(
+      deliveryCrg,
+      weight,
+      values,
+      discount,
+      totalPrice,
+      date,
+      order,
+      invoice_str,
+      timestamp
+    );
+    await sendConfirmationMsg(values, invoice_str);
 
-      console.error("Error placing order:", error);
-    }
+    //   console.error("Error placing order:", error);
+    // }
 
     await createCustomer(values, date, cusetomer_id, timestamp);
 
