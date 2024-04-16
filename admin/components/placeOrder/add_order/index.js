@@ -8,7 +8,7 @@ import Button from "../../shared/Button";
 import { useRouter } from "next/router";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/app/redux/slices/authSlice";
-import { Today } from "@/admin/utils/helpers";
+import { ToDateTimeString, Today } from "@/admin/utils/helpers";
 import { selectConfig } from "@/app/redux/slices/configSlice";
 import axios from "axios";
 
@@ -21,13 +21,10 @@ const validationSchema = Yup.object().shape({
   customer_name: Yup.string().max(50).required().label("Name"),
   customer_address: Yup.string().max(300).required().label("Address"),
   salePrice: Yup.number().required().label("Sale Price"),
+  deliveryCharge: Yup.number().required().label("Delivery Charge"),
+  paidAmount: Yup.number().required().label("Paid Amount"),
+  courier: Yup.string().required().label("Note"),
   note: Yup.string().max(500).label("Note"),
-  patali_gol: Yup.number().positive().label("Weight"),
-  patali_pata: Yup.number().positive().label("Weight"),
-  patali_foial: Yup.number().positive().label("Weight"),
-  patali_narkel: Yup.number().positive().label("Weight"),
-  liquid: Yup.number().positive().label("Weight"),
-  dana: Yup.number().positive().label("Weight"),
 });
 
 const AddOrder = ({ onClick }) => {
@@ -119,22 +116,15 @@ const AddOrder = ({ onClick }) => {
     let weight = 0;
 
     products &&
-      products.map((item) => {
-        const yup = item.yup;
+      products?.map((item) => {
+        const yup = item.product_name;
 
         if (values[yup]) {
-          const title = item.yup.split("_");
-          let s = [];
-
-          title &&
-            title.map((e) => {
-              s.push(e[0].toUpperCase() + e.slice(1));
-            });
-
           weight += values[yup];
 
           order.push({
-            title: s.join(" "),
+            title: item.product_name,
+            category: item.child_category,
             quantity: values[yup],
             price: item.sale_price,
             total_price: values[yup] * item.sale_price,
@@ -142,19 +132,26 @@ const AddOrder = ({ onClick }) => {
         }
       });
 
+    console.log(order);
+
     order &&
       order.map((p) => {
         totalPrice += p.total_price;
       });
 
-    const deliveryCrg =
-      weight >= 1 && weight === 1 ? 130 : 130 + (weight - 1) * 20;
+    const deliveryCrg = values?.deliveryCharge;
+
     const discount =
       totalPrice + deliveryCrg - values.salePrice > 0
         ? totalPrice + deliveryCrg - values?.salePrice
         : "0";
 
-    const date = Today();
+    const dueAmount =
+      values?.salePrice + values?.deliveryCharge - values?.paidAmount;
+
+    const date = ToDateTimeString();
+
+    console.log(values);
 
     // try {
     //   // Set your API key and secret key
@@ -212,6 +209,7 @@ const AddOrder = ({ onClick }) => {
     // } catch (error) {
 
     await isFailedPlaceOrderHandler(
+      dueAmount,
       deliveryCrg,
       weight,
       values,
@@ -222,7 +220,7 @@ const AddOrder = ({ onClick }) => {
       invoice_str,
       timestamp
     );
-    await sendConfirmationMsg(values, invoice_str);
+    await sendConfirmationMsg(values, invoice_str, dueAmount);
 
     //   console.error("Error placing order:", error);
     // }
@@ -237,6 +235,7 @@ const AddOrder = ({ onClick }) => {
   const sendConfirmationMsg = async (
     values,
     invoice_str,
+    dueAmount,
     tracking_code = ""
   ) => {
     const customer_name = values?.customer_name || "Customer";
@@ -245,9 +244,7 @@ const AddOrder = ({ onClick }) => {
 
     const url = "https://api.sms.net.bd/sendsms";
     const apiKey = config[0]?.values.bulk_auth;
-    const message = `Dear ${customer_name}, Your order has been successfully placed at ${company_name}. Invoice No: ${invoice_str}. Please keep BDT: ${
-      values?.salePrice
-    }tk ready while receiving the parcel.${
+    const message = `Dear ${customer_name}, Your order has been successfully placed at ${company_name}. Invoice No: ${invoice_str}. Please keep BDT: ${dueAmount}tk ready while receiving the parcel.${
       tracking_code &&
       ` Track your Parcel here: https://steadfast.com.bd/t/${tracking_code}`
     } Hotline: +88${company_contact}. Thanks for being with us.`;
@@ -310,6 +307,7 @@ const AddOrder = ({ onClick }) => {
   };
 
   const isFailedPlaceOrderHandler = async (
+    dueAmount,
     deliveryCrg,
     weight,
     values,
@@ -320,9 +318,25 @@ const AddOrder = ({ onClick }) => {
     invoice_str,
     timestamp
   ) => {
+    // console.log({
+    //   dueAmount,
+    //   deliveryCrg,
+    //   weight,
+    //   customer_details: values,
+    //   discount,
+    //   totalPrice,
+    //   date,
+    //   order,
+    //   timestamp,
+    //   placeBy: user.name,
+    //   placeById: user.staff_id,
+    //   status: "Pending",
+    // });
+
     await db.collection("placeOrder").doc(invoice_str).set({
+      dueAmount,
       deliveryCrg,
-      weight,
+      quantity: weight,
       customer_details: values,
       discount,
       totalPrice,
@@ -352,13 +366,10 @@ const AddOrder = ({ onClick }) => {
             customer_name: "",
             customer_address: "",
             salePrice: "",
-            note: "",
-            patali_gol: "",
-            patali_pata: "",
-            patali_foial: "",
-            patali_narkel: "",
-            liquid: "",
-            dana: "",
+            deliveryCharge: "",
+            paidAmount: "",
+            courier: "Sundorbon" || "",
+            note: "দয়া করে সাবধানে বহন করবেন। গাছ আইটেম..." || "",
           }}
           onSubmit={placeOrder}
           validationSchema={validationSchema}

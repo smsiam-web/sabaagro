@@ -7,7 +7,7 @@ import { BsCloudDownload } from "react-icons/bs";
 
 const GeneratePdf = ({ html, disabled, item, id }) => {
   const generate = (e) => {
-    e.stopPropagation()
+    e.stopPropagation();
     generateInvoice();
   };
 
@@ -159,7 +159,8 @@ const GeneratePdf = ({ html, disabled, item, id }) => {
       document.getElementById("total").innerText,
       200
     );
-
+    doc.addFont("SiyamRupali.ttf", "custom", "normal");
+    doc.setFont("custom");
     // doc.text(document.querySelector(".content > h1").innerHTML, 5, 75);
     doc.addImage(image, 0, 0, 210, 297);
     doc.text(invoiceNo, 43, 83.5);

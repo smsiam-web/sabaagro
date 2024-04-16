@@ -271,9 +271,13 @@ const OrderTable = () => {
                             </td>
                             <td className="px-4 py-3 font-bold">
                               {/* <Link href={`/admin/place-order/id=${item.id}`}> */}
-                              <span className="text-sm">{item.consignment_id ? item.consignment_id : "null"}</span>
+                              <span className="text-sm">
+                                {item.consignment_id
+                                  ? item.consignment_id
+                                  : "null"}
+                              </span>
                               {/* </Link> */}
-                            </td> 
+                            </td>
 
                             <td className="px-4 py-3">
                               <span className="text-sm ">

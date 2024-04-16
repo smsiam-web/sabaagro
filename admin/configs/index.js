@@ -167,6 +167,63 @@ export const TCATEGORY = [
     id: "আখের গুড়",
   },
 ];
+export const PTYPE = [
+  {
+    name: "ফলসহ গাছ",
+    id: "ফলসহ গাছ",
+  },
+  {
+    name: "রেডি সেটাপ গাছ",
+    id: "রেডি সেটাপ গাছ",
+  },
+  {
+    name: "ফলসহ রেডি সেটাপ গাছ",
+    id: "ফলসহ রেডি সেটাপ গাছ",
+  },
+  {
+    name: "মাতৃকলম গাছ",
+    id: "মাতৃকলম গাছ",
+  },
+  {
+    name: "বীজের গাছ",
+    id: "বীজের গাছ",
+  },
+  {
+    name: "টিস্যু কালচার পদ্ধতি",
+    id: "টিস্যু কালচার পদ্ধতি",
+  },
+];
+export const COURIER = [
+  {
+    name: "Sundorbon",
+    id: "Sundorbon",
+  },
+  {
+    name: "Steadfast",
+    id: "Steadfast",
+  },
+  {
+    name: "AJR",
+    id: "AJR",
+  },
+  {
+    name: "SA Paribahan",
+    id: "SA Paribahan",
+  },
+  {
+    name: "Ahmed Parcel",
+    id: "Ahmed Parcel",
+  },
+  {
+    name: "Red-X",
+    id: "Red-X",
+  },
+
+  {
+    name: "Janany",
+    id: "Janany",
+  },
+];
 
 export const ROLE = [
   {

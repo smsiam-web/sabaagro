@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AppTextArea, FormDropdown, FormInput } from "../../shared/Form";
-import { TCATEGORY } from "@/admin/configs";
+import { PTYPE, TCATEGORY } from "@/admin/configs";
 import FileUpload from "../../shared/FileUP";
 import { useSelector } from "react-redux";
 import { selectCategory } from "@/app/redux/slices/categorySlice";
@@ -72,7 +72,7 @@ const ProductDetailsFrom = () => {
         <FormDropdown
           name="product_type"
           placeholder="Select type"
-          items={TCATEGORY}
+          items={PTYPE}
         />
       </div>
 

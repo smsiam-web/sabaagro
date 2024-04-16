@@ -10,7 +10,6 @@ import {
   updateProductId,
 } from "@/app/redux/slices/updateProductId";
 
-
 //get hard coded program object
 // import { program } from "./programObject";
 
@@ -34,7 +33,6 @@ const PlaceOrder = () => {
   useEffect(() => {
     ID && toggleOpen();
   }, [ID]);
-
 
   return (
     <main className="h-full overflow-y-auto">
