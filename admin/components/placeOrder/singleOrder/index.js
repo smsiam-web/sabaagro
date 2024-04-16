@@ -200,8 +200,8 @@ const OrderDetails = ({ onClick }) => {
                 </table>
               </div>
             </div>
-            <div className="flex items-center justify-end  w-full">
-              <div className="flex flex-col w-2/3 sm:w-1/2 border-t-2 text-sm mt-8 sm:mt-32">
+            <div className="flex items-center justify-end  w-full mt-8">
+              <div className="flex flex-col w-2/3 sm:w-1/2 border-t-2 text-sm">
                 <div className="flex w-full px-4 justify-between">
                   <h1 className="text-sm sm:text-lg font-mono font-medium">
                     Sub-Total:

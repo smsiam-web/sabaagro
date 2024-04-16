@@ -6,7 +6,7 @@
   position: sticky;
   top: 100px;
   left: 0;
-  overflow-y: auto;
+  overflow-y: visible;
   z-index: 50;
 }
 .container::-webkit-scrollbar {

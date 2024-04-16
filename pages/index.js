@@ -6,7 +6,6 @@ import { getPageServer } from "../app/utils/helpers";
 import Products from "@/app/components/home/products";
 import HomeCategory from "@/app/components/home/HomeCategory";
 
-
 const Home = ({ page }) => {
   // if (page === "admin") return <AdmainMain />;
 

@@ -12,7 +12,7 @@ const Invoice = () => {
           <span>Back</span>
         </div>
       </Link>
-      <OrderDetails  />
+      <OrderDetails />
     </div>
   );
 };

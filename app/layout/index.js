@@ -12,6 +12,7 @@ import AdminLayout from "@/admin/layout";
 import { updateStaff } from "@/app/redux/slices/staffSlice";
 import { updateOrder } from "@/app/redux/slices/orderSlice";
 import { updateCategory } from "../redux/slices/categorySlice";
+import Head from "next/head";
 
 const Layout = ({ children }) => {
   const [loading, setLoading] = useState(false);
@@ -29,7 +30,6 @@ const Layout = ({ children }) => {
     const items = JSON.stringify(cartItems || []);
     localStorage.setItem("@CART_ITEMS", items);
   }, [cartItems]);
-
 
   // firebase user listeners
   useEffect(() => {
@@ -90,8 +90,8 @@ const Layout = ({ children }) => {
         snap.docs.map((doc) => {
           category.push({
             id: doc.id,
-            ...doc.data()
-          })
+            ...doc.data(),
+          });
         });
         dispatch(updateCategory(category));
       });
@@ -111,8 +111,8 @@ const Layout = ({ children }) => {
         snap.docs.map((doc) => {
           ourStaffs.push({
             id: doc.id,
-            ...doc.data()
-          })
+            ...doc.data(),
+          });
         });
         setOurStaff(ourStaffs);
         dispatch(updateStaff(ourStaffs));
@@ -143,6 +143,9 @@ const Layout = ({ children }) => {
 
   return (
     <>
+      <Head>
+        <link rel="shortcut icon" href="/sabaagro_logo.ico" />
+      </Head>
       {user?.authKey === key ? (
         <AdminLayout>{children}</AdminLayout>
       ) : (
