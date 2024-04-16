@@ -86,6 +86,9 @@ const OrderDetails = ({ onClick }) => {
                 <div className=" sm:pt-1 flex justify-center items-center">
                   <div>
                     <img id="bar_code" ref={inputRef} />
+                    <span id="invoiceNo" className="hidden">
+                      {id}
+                    </span>
                   </div>
                 </div>
                 <div className="w-96 flex justify-end items-end text-end">
@@ -261,12 +264,12 @@ const OrderDetails = ({ onClick }) => {
             <img src="/invoice/saba_bottom.png" alt="" />
           </div>
         </div>
-        {/* <GeneratePDF
-        html={ref}
-        disabled={disabled}
-        onClick={() => jsxToPng(null)}
-      /> */}
       </div>
+      <GeneratePDF
+        html={ref}
+        // disabled={disabled}
+        onClick={() => jsxToPng(null)}
+      />
     </>
   );
 };
