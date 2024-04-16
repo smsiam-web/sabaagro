@@ -48,13 +48,18 @@ const OrderDetails = ({ onClick }) => {
   return (
     <>
       <div className="flex items-center justify-end gap-4 pb-4">
+        <GeneratePDF
+          html={ref}
+          // disabled={disabled}
+          onClick={() => jsxToPng(null)}
+        />
         <ReactToPrint
           bodyClass="print-agreement"
           content={() => ref.current}
           trigger={() => (
             <Button
               title="Print Invoice"
-              className="bg-primary text-white"
+              className="bg-primary hover:bg-green-900 hover:shadow-lg transition-all duration-300 text-white"
               type="primary"
             >
               Print
@@ -265,11 +270,6 @@ const OrderDetails = ({ onClick }) => {
           </div>
         </div>
       </div>
-      <GeneratePDF
-        html={ref}
-        // disabled={disabled}
-        onClick={() => jsxToPng(null)}
-      />
     </>
   );
 };

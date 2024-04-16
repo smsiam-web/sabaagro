@@ -80,7 +80,10 @@ const GenerateStick = ({ html }) => {
   return (
     <div>
       <span onClick={generateSticker}>
-        <Button title="Lable" className="bg-primary text-white"></Button>
+        <Button
+          title="Label"
+          className="bg-primary hover:bg-green-900 hover:shadow-lg transition-all duration-300 text-white"
+        ></Button>
       </span>
     </div>
   );

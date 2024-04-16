@@ -225,22 +225,12 @@ const GeneratePdf = ({ html, disabled, item, id }) => {
           <AiOutlinePrinter size={20} />
         </span>
       ) : (
-        <div className="my-10 grid grid-cols-2 gap-4 md:gap-10 lg:gap-14">
+        <div className="">
           <div className="col-span-2 sm:col-span-1">
             <Button
-              icon={<BsCloudDownload size={26} />}
               onClick={generateImage}
               title="Download Invoice"
-              className="bg-sky-400 font-medium hover:bg-sky-500 hover:shadow-lg transition-all duration-300 text-white w-full h-14 text-md sm:text-lg "
-            />
-          </div>
-
-          <div className="col-span-2 sm:col-span-1">
-            <Button
-              icon={<AiOutlinePrinter size={26} />}
-              onClick={() => generate}
-              title="Print Invoice"
-              className="bg-sky-400 font-medium  hover:bg-sky-500 hover:shadow-lg transition-all duration-300 text-white w-full h-14 text-md sm:text-lg "
+              className="bg-primary font-medium hover:bg-green-900 hover:shadow-lg transition-all duration-300 text-white"
             />
           </div>
         </div>
