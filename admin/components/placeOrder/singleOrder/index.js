@@ -7,6 +7,7 @@ import Image from "next/image";
 import ReactToPrint from "react-to-print";
 import Button from "../../shared/Button";
 import { db } from "@/app/utils/firebase";
+import Link from "next/link";
 
 const GeneratePDF = dynamic(() => import("../../../utils/GeneratePDF"), {
   ssr: false,
@@ -48,6 +49,13 @@ const OrderDetails = ({ onClick }) => {
   return (
     <>
       <div className="flex items-center justify-end gap-4 pb-4">
+        <Link href={"/admin/place-order/new"}>
+          <Button
+            title="Place order"
+            className="bg-primary hover:bg-green-900 hover:shadow-lg transition-all duration-300 text-white"
+            type="primary"
+          />
+        </Link>
         <GeneratePDF
           html={ref}
           // disabled={disabled}
@@ -61,9 +69,7 @@ const OrderDetails = ({ onClick }) => {
               title="Print Invoice"
               className="bg-primary hover:bg-green-900 hover:shadow-lg transition-all duration-300 text-white"
               type="primary"
-            >
-              Print
-            </Button>
+            />
           )}
         />
         <GenerateStick html={ref} />
@@ -112,6 +118,12 @@ const OrderDetails = ({ onClick }) => {
                       Received by:{" "}
                       <span className="font-medium" id="status">
                         {singleOrder?.placeBy}
+                      </span>
+                    </p>
+                    <p>
+                      Courier:{" "}
+                      <span className="font-medium" id="status">
+                        {singleOrder?.customer_details?.courier}
                       </span>
                     </p>
                   </div>
@@ -165,30 +177,33 @@ const OrderDetails = ({ onClick }) => {
                             key={i}
                             className={`${(i + 1) % 2 == 0 && "bg-sub"} px-2`}
                           >
-                            <td className="px-2 py-1 font-bold">
+                            <td className="px-4 py-1 font-bold">
                               <span className="text-base">{`0${i + 1}.`}</span>
                             </td>
-                            <td className="px-2 py-1 font-medium">
-                              <span className="text-base">{item.title}</span>
+                            <td className="px-4 py-1 font-medium">
+                              <span className="text-base">
+                                {item.product_name}
+                              </span>
                             </td>
 
-                            <td className="px-2 py-1">
+                            <td className="px-4 py-1">
                               <span className="text-base ">
-                                {item.category}
+                                {item.child_category}
                               </span>
                             </td>
 
-                            <td className="px-2 py-1">
+                            <td className="px-10 py-1">
                               <span className="text-base font-semibold ">
-                                {item.quantity}pc
+                                {item.quantity}
+                                {item.unit}
                               </span>
                             </td>
-                            <td className="px-2 py-1">
+                            <td className="px-4 py-1">
                               <span className="text-base font-semibold ">
-                                {item.price}
+                                {item.sale_price}
                               </span>
                             </td>
-                            <td className="px-2 py-1">
+                            <td className="px-4 py-1">
                               <span className="text-base font-semibold ">
                                 {item.total_price}/-
                               </span>
@@ -200,7 +215,13 @@ const OrderDetails = ({ onClick }) => {
                 </table>
               </div>
             </div>
-            <div className="flex items-center justify-end  w-full mt-8">
+            <div className="flex justify-between  w-full mt-8">
+              <div className="text-slate-500">
+                [<span className="text-base font-bold text-primary">Note:</span>{" "}
+                <span className="text-slate-500 font-semibold">
+                  {singleOrder?.customer_details?.note}]
+                </span>
+              </div>
               <div className="flex flex-col w-2/3 sm:w-1/2 border-t-2 text-sm">
                 <div className="flex w-full px-4 justify-between">
                   <h1 className="text-sm sm:text-lg font-mono font-medium">
@@ -220,8 +241,8 @@ const OrderDetails = ({ onClick }) => {
                     className="text-sm sm:text-lg md:text-xl text-title font-mono"
                   >
                     {singleOrder?.customer_details?.delivery_type
-                      ? "Home"
-                      : "Point"}
+                      ? "Point"
+                      : "Home"}
                   </h1>
                   <h1
                     id="shipping_cost"

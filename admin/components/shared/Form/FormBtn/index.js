@@ -6,8 +6,8 @@ function FormBtn({ disabled, title, loading = false }) {
 
   return (
     <Button
-    disabled={disabled}
-      className="w-full py-3 bg-primary hover:bg-yellow-500"
+      disabled={disabled}
+      className="w-full py-3 bg-primary hover:bg-green-900 text-white hover:text-slate-50"
       title={title}
       loading={loading}
       onClick={handleSubmit}

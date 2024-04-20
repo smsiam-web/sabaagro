@@ -298,13 +298,13 @@ const OrderTable = () => {
                               <span
                                 className={`${
                                   item?.customer_details?.delivery_type
-                                    ? "bg-green-100 text-green-400"
-                                    : "bg-slate-200 text-slate-500"
+                                    ? "bg-slate-200 text-slate-500"
+                                    : "bg-green-100 text-green-400"
                                 } text-xs uppercase font-serif font-medium px-2 py-1 rounded-full`}
                               >
                                 {item?.customer_details?.delivery_type
-                                  ? "Home Delivery"
-                                  : "Point Delivery"}
+                                  ? "Point Delivery"
+                                  : "Home Delivery"}
                               </span>
                             </td>
                             <td className="px-4 py-3">

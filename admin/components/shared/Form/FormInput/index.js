@@ -17,7 +17,7 @@ function FormInput({
   const { setFieldTouched, handleChange, errors, touched, values } =
     useFormikContext();
   const [inputType, setInputType] = useState(type);
-  
+
   return (
     <div className={`${!editProfile ? "mb-4" : ""}`}>
       <div className="relative flex items-center">

@@ -18,8 +18,9 @@ import { FaPrint } from "react-icons/fa";
 import { useBarcode } from "next-barcode";
 import { notifications } from "@mantine/notifications";
 import { selectUser } from "@/app/redux/slices/authSlice";
+import Link from "next/link";
 
-const SearchBy = ({ onClick }) => {
+const SearchBy = () => {
   const [currentValue, setCurrentValue] = useState("RA02");
   const [filterOrder, setFilterOrder] = useState(null);
   const [openedd, setOpened] = useState(null);
@@ -133,7 +134,7 @@ const SearchBy = ({ onClick }) => {
 
   useEffect(() => {
     const value = currentValue?.toUpperCase();
-    if (value?.split("0")[0] === "RA" && value.length === 8) {
+    if (value?.split("0")[0] === "RA" && value.length === 6) {
       filter(value);
     }
   }, [currentValue]);
@@ -374,12 +375,13 @@ const SearchBy = ({ onClick }) => {
             </div>
 
             <div className="w-full md:w-56 lg:w-56 xl:w-56">
-              <Button
-                onClick={onClick}
-                title="Place Order"
-                className="bg-blue-400 hover:bg-blue-500 hover:shadow-lg transition-all duration-300 text-white w-full h-14"
-                icon=<AiOutlineAppstoreAdd size={24} />
-              />
+              <Link href={"/admin/place-order/new"}>
+                <Button
+                  title="Place Order"
+                  className="bg-blue-400 hover:bg-blue-500 hover:shadow-lg transition-all duration-300 text-white w-full h-14"
+                  icon=<AiOutlineAppstoreAdd size={24} />
+                />
+              </Link>
             </div>
           </div>
         </div>

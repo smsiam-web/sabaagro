@@ -53,7 +53,7 @@ const PlaceOrder = () => {
       </div>
       <div className="grid mx-auto">
         <h1 className="mb-3 text-lg font-bold text-gray-700 ">Add New Order</h1>
-        <SearchBy onClick={() => toggleOpen()} />
+        <SearchBy />
         <DropDownload />
         <OrderTable />
       </div>

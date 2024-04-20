@@ -1,148 +1,274 @@
 import React, { useEffect, useState } from "react";
-import { Tabs } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { Modal } from "@mantine/core";
+import { useDispatch } from "react-redux";
+
 import {
   AppTextArea,
   FormDropdown,
   FormInput,
   FormRadio,
 } from "../../shared/Form";
-import { db } from "@/app/utils/firebase";
 import { COURIER } from "@/admin/configs";
+import { selectProduct } from "@/app/redux/slices/productSlice";
+import { useSelector } from "react-redux";
+import Button from "../../shared/Button";
+import { updateSelectedProduct } from "@/app/redux/slices/selectedProductForPlaceOrderSlice";
 
 const OrderDetailsForm = () => {
-  const [fruitsPlant, setFruitsPlant] = useState(null);
-  const [mosla, setMosla] = useState(null);
+  const [products, setProducts] = useState(null);
+  const [searchP, setSearchP] = useState(null);
+  const [value, setValue] = useState(null);
+  const [confirmVal, setConfirmVal] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [isActive, setIsActive] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState([]);
+  const [opened, { open, close }] = useDisclosure(false);
+  const p = useSelector(selectProduct);
+  const dispatch = useDispatch();
 
-  console.log(fruitsPlant);
-
-  // Get products from firebase database
   useEffect(() => {
-    const unSub = db
-      .collection("products")
-      .orderBy("timestamp", "desc")
-      .onSnapshot((snap) => {
-        const fruits = [];
-        const mosla = [];
-
-        snap.docs.map((doc) => {
-          doc.data().product_details.parent_category === "ফলের চারা" &&
-            fruits.push({
-              ...doc.data().product_details,
-            });
-          doc.data().product_details.parent_category === "মসলা চারা" &&
-            mosla.push({
-              ...doc.data().product_details,
-            });
-        });
-        setFruitsPlant(fruits);
-        setMosla(mosla);
+    const Arr = [];
+    p?.map((i) => {
+      Arr.push({
+        sku: i.product_details.sku,
+        sale_price: i.product_details.sale_price,
+        product_name: i.product_details.product_name,
+        unit: i.product_details.unit,
+        child_category: i.product_details.child_category,
+        id: i.id,
+        timestamp: i.timestamp,
+        quantity: 1,
       });
-
-    return () => {
-      unSub();
-    };
+    });
+    setProducts(Arr);
   }, []);
 
+  function customFilter(objList, text) {
+    if (undefined === text || text === "") return objList;
+    return objList.filter((product) => {
+      let flag;
+      for (let prop in product) {
+        flag = false;
+        flag = product[prop].toString().indexOf(text) > -1;
+        if (flag) break;
+      }
+      return flag;
+    });
+  }
+
+  const removeItem = (i) => {
+    const f = [];
+    let x = selectedProduct.filter((item) => {
+      if (item.id === i.id) return;
+      f.push(item);
+    });
+    setSelectedProduct(f);
+    dispatch(updateSelectedProduct(f));
+    if (!f.length) setIsActive(true);
+  };
+  const handelChangeQ = (e) => {
+    setQuantity(e.target.value);
+  };
+  const handelChange = (e) => {
+    setValue(e.target.value);
+    if (!e.target.value) return setSearchP(null);
+    setSearchP(customFilter(products, e.target.value));
+  };
+  const handelSelect = (i) => {
+    open();
+    setConfirmVal(i);
+  };
+  const handelConfirm = () => {
+    setValue("");
+    let arr = [];
+    !!selectedProduct.length && arr.push(...selectedProduct);
+    arr.push({
+      ...confirmVal,
+      quantity: quantity || 1,
+      total_price: confirmVal.sale_price * quantity,
+    });
+    setSelectedProduct(arr);
+    dispatch(updateSelectedProduct(arr));
+    arr = [];
+    setSearchP(null);
+    setIsActive(false);
+    close();
+    setConfirmVal(null);
+    setQuantity(1);
+  };
+
   return (
-    <div className="max-h-full">
-      <div>
-        <span>Delivery Type:</span>
+    <div className="max-h-full max-w-4xl">
+      <Modal
+        opened={opened}
+        onClose={close}
+        centered={true}
+        title="পণ্যর পরিমান নির্বাচন করুন"
+      >
+        <input
+          type="number"
+          defaultValue={1}
+          placeholder="Quantity"
+          className="outline-none border-[1px] py-3 text-sm appearance-none opacity-75 text-title px-5 rounded-md w-full border-gray-200 focus:outline-none
+            focus:border-primary transition duration-200
+            focus:ring-0 ease-in-out"
+          onChange={(e) => handelChangeQ(e)}
+        />
+        <div className="w-full flex justify-end gap-2 py-4">
+          <Button
+            title="Cancel"
+            onClick={() => close()}
+            className="bg-orange-400 w-fit hover:bg-orange-500 hover:shadow-lg text-white transition-all duration-300"
+          />
+          <Button
+            title="Submit"
+            onClick={() => handelConfirm()}
+            className="bg-blue-400 w-fit hover:bg-blue-500 hover:shadow-lg text-white transition-all duration-300"
+          />
+        </div>
+      </Modal>
+      <div className="pb-4">
+        <label>Delivery Type:</label>
         <FormRadio
           type="text"
           name="delivery_type"
-          forTrue="Home"
-          forFalse="Point"
+          forTrue="Point"
+          forFalse="Home"
         />
       </div>
       <div>
-        <span>Phone Number (Must be Eng. Digit)</span>
-        <FormInput
-          type="text"
-          max={11}
-          name="phone_number"
-          placeholder="+880"
-        />
+        <label>Phone Number</label>
+        <label className="text-sub-title text-sm block pb-1">
+          (Must be Eng. Digit)
+        </label>
+        <FormInput type="text" max={11} name="phone_number" placeholder="01" />
       </div>
       <div>
-        <span>Name</span>
-        <FormInput name="customer_name" placeholder="Name" />
+        <label>Name</label>
+        <FormInput name="customer_name" placeholder="Full Name" />
       </div>
       <div>
-        <span>Address</span>
-        <span className="text-sub-title text-sm block">
+        <label>Address</label>
+        <label className="text-sub-title text-sm block">
           (maximum 300 characters)
-        </span>
+        </label>
         <AppTextArea
           name="customer_address"
           placeholder="Ex: H#12, R#04, Sec# 4, Mirpur Dhaka."
         />
       </div>
-      <div>
-        <Tabs color="violet" defaultValue="fruitsPlant" variant="pills">
-          <Tabs.List>
-            <Tabs.Tab value="fruitsPlant">ফলের চারা</Tabs.Tab>
-            <Tabs.Tab value="mosla">মসলা চারা</Tabs.Tab>
-            <Tabs.Tab value="others">অন্যান্য</Tabs.Tab>
-          </Tabs.List>
 
-          <Tabs.Panel value="fruitsPlant" pt="xs">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {fruitsPlant?.map((i) => (
-                <div
-                  key={i.sku}
-                  className="p-2 bg-blue-500 rounded-md col-span-1"
-                >
-                  <span className="pb-10 text-lg text-white">
-                    #{i.product_name}
-                  </span>
-                  <div className="flex items-center pt-1 sm:pt-2">
-                    <div className="w-2/3">
-                      <FormInput
-                        type="number"
-                        name={i.product_name}
-                        placeholder=""
-                      />
-                    </div>
-                    <span className="text-lg text-white font-bold">.pc</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Tabs.Panel>
+      <div className="mt-3">
+        <label>Product</label>
+        <div className="w-full flex flex-col justify-between">
+          {!!selectedProduct?.length && (
+            <table className="w-full mb-3 whitespace-nowrap table-auto border">
+              <thead className="text-base font-semibold tracking-wide text-left  uppercase bg-slate-800 border-slate-800 border-2 text-slate-50">
+                <tr>
+                  <th className="px-4 py-1 ">SL</th>
+                  <th className="px-4 py-1 ">Item</th>
+                  <th className="px-4 py-1 ">Quantity</th>
+                  <th className="px-4 py-1 ">Price</th>
+                  <th className="px-4 py-1 ">Total</th>
+                  <th className="px-4 py-1 ">Remove</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-100 ">
+                {selectedProduct &&
+                  selectedProduct?.map((i, index) => (
+                    <tr key={index}>
+                      <td className="px-4 py-1 font-bold">
+                        <span className="text-base">
+                          {index + 1 <= 9 ? `0${index + 1}` : index + 1}
+                        </span>
+                      </td>
+                      <td className="px-4 py-1 font-medium">
+                        <span className="text-base">{i?.product_name}</span>
+                      </td>
 
-          <Tabs.Panel value="mosla" pt="xs">
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {mosla?.map((i) => (
-                <div
-                  key={i.sku}
-                  className="p-2 bg-blue-500 rounded-md col-span-1"
-                >
-                  <span className="pb-10 text-lg text-white">
-                    #{i.product_name}
+                      <td className="px-10 py-1">
+                        <span className="text-base font-semibold ">
+                          {i?.quantity}
+                          {i?.unit}
+                        </span>
+                      </td>
+                      <td className="px-4 py-1">
+                        <span className="text-base font-semibold ">
+                          {i.sale_price}
+                        </span>
+                      </td>
+                      <td className="px-4 py-1">
+                        <span className="text-base font-semibold ">
+                          {i.total_price}/-
+                        </span>
+                      </td>
+                      <td className="px-11 py-1">
+                        <span
+                          className="text-base cursor-pointer hover:text-red-600 font-semibold"
+                          onClick={() => removeItem(i)}
+                        >
+                          X
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          )}
+          <div>
+            {isActive && (
+              <input
+                type="text"
+                id="search"
+                value={value}
+                className="outline-none border-[1px] py-3 text-sm appearance-none opacity-75 text-title px-5 rounded-md w-full border-gray-200 focus:outline-none
+            focus:border-primary transition duration-200
+            focus:ring-0 ease-in-out"
+                placeholder="Search Product"
+                onChange={(e) => handelChange(e)}
+              />
+            )}
+          </div>
+        </div>
+        {!!searchP && (
+          <ul className="origin-top-right absolute right-100 z-50 mt-2 max-w-2/3 rounded-md shadow-lg bg-white p-1 ring-1 ring-black ring-opacity-5 focus:outline-none">
+            {searchP?.map((i) => (
+              <li
+                key={i?.id}
+                className="justify-between cursor-pointer font-serif font-medium py-2 pl-4 transition-colors duration-150 hover:bg-gray-100 text-gray-500 hover:text-green-500 border-b-2 last:border-none"
+                onClick={() => handelSelect(i)}
+              >
+                <span className="flex items-center gap-3 text-sm">
+                  <span className="text-black">{i.product_name}</span>
+                  <span className="text-primary">( ক্যাটাগরিঃ </span>
+                  <span className="text-slate-600">{i.child_category} )</span>
+                  <span className="text-primary">দামঃ </span>
+                  <span className="text-slate-600 font-sans font-bold">
+                    {i.sale_price}/-
                   </span>
-                  <div className="flex items-center pt-1 sm:pt-2">
-                    <div className="w-2/3">
-                      <FormInput
-                        type="number"
-                        name={i.product_name}
-                        placeholder=""
-                      />
-                    </div>
-                    <span className="text-lg text-white font-bold">.pc</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Tabs.Panel>
-        </Tabs>
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {!isActive && (
+          <div className="flex justify-end py-2">
+            <Button
+              onClick={() => setIsActive(true)}
+              title="Add +"
+              className="bg-blue-400 w-fit hover:bg-blue-500 hover:shadow-lg text-white transition-all duration-300"
+            />
+          </div>
+        )}
       </div>
 
       <div className="mt-3">
-        <span>Amount</span>
+        <label>Amount</label>
         <FormInput type="number" name="salePrice" placeholder="Amount" />
       </div>
       <div className="mt-3">
-        <span>Delivery Charge</span>
+        <label>Delivery Charge</label>
         <FormInput
           type="number"
           name="deliveryCharge"
@@ -150,11 +276,11 @@ const OrderDetailsForm = () => {
         />
       </div>
       <div className="mt-3">
-        <span>Paid Amount</span>
+        <label>Paid Amount</label>
         <FormInput type="number" name="paidAmount" placeholder="Paid Amount" />
       </div>
       <div>
-        <span>Courier Service</span>
+        <label>Courier Service</label>
         <FormDropdown
           name="courier"
           placeholder="Select Courier Service"
@@ -162,10 +288,10 @@ const OrderDetailsForm = () => {
         />
       </div>
       <div>
-        <span>Note</span>
-        <span className="text-sub-title text-sm block">
+        <label>Note</label>
+        <label className="text-sub-title text-sm block">
           (maximum 500 characters)
-        </span>
+        </label>
         <AppTextArea name="note" placeholder="Note..." />
       </div>
     </div>

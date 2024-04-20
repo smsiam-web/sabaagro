@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import OrderDetailsForm from "./OrderDetailsForm";
 import * as Yup from "yup";
 import { AppForm, FormBtn } from "../../shared/Form";
-import FormHeader from "../../shared/FormHeader";
 import { db, timestamp } from "@/app/utils/firebase";
 import Button from "../../shared/Button";
 import { useRouter } from "next/router";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "@/app/redux/slices/authSlice";
 import { ToDateTimeString, Today } from "@/admin/utils/helpers";
 import { selectConfig } from "@/app/redux/slices/configSlice";
 import axios from "axios";
+import Link from "next/link";
+import {
+  selectSelectedProduct,
+  updateSelectedProduct,
+} from "@/app/redux/slices/selectedProductForPlaceOrderSlice";
 
 const validationSchema = Yup.object().shape({
   delivery_type: Yup.boolean().required().label("Delivery type"),
@@ -30,12 +34,10 @@ const validationSchema = Yup.object().shape({
 const AddOrder = ({ onClick }) => {
   const [config, setConfig] = useState(useSelector(selectConfig) || null);
   const [loading, setLoading] = useState(false);
-  const [orderResponse, setOrderResponse] = useState(false);
   const user = useSelector(selectUser);
   const router = useRouter();
-  const [products, setProducts] = useState(null);
   const [uid, setInvoiceID] = useState(null);
-  const [isFalse, setFalse] = useState(false);
+  const dispatch = useDispatch();
 
   // // Function to place an order
   // const placeOrderStf = async (orderData) => {
@@ -81,27 +83,7 @@ const AddOrder = ({ onClick }) => {
       unSub();
     };
   }, []);
-
-  // Get products from firebase database
-  useEffect(() => {
-    const unSub = db
-      .collection("products")
-      .orderBy("timestamp", "desc")
-      .onSnapshot((snap) => {
-        const product = [];
-        snap.docs.map((doc) => {
-          // doc.data().product_details.parent_category === "খেজুরের গুড়" &&
-          product.push({
-            ...doc.data().product_details,
-          });
-        });
-        setProducts(product);
-      });
-
-    return () => {
-      unSub();
-    };
-  }, []);
+  const order = useSelector(selectSelectedProduct);
 
   // place product handler on submit
   const placeOrder = async (values) => {
@@ -111,43 +93,20 @@ const AddOrder = ({ onClick }) => {
     const cusetomer_id = `SAC0${invoice_id}`;
     await updateInvoiceID(invoice_id);
 
-    const order = [];
     let totalPrice = 0;
-    let weight = 0;
-
-    products &&
-      products?.map((item) => {
-        const yup = item.product_name;
-
-        if (values[yup]) {
-          weight += values[yup];
-
-          order.push({
-            title: item.product_name,
-            category: item.child_category,
-            quantity: values[yup],
-            price: item.sale_price,
-            total_price: values[yup] * item.sale_price,
-          });
-        }
-      });
-
-    console.log(order);
+    let quantity = 0;
 
     order &&
       order.map((p) => {
+        quantity += p.quantity;
         totalPrice += p.total_price;
       });
 
     const deliveryCrg = values?.deliveryCharge;
 
-    const discount =
-      totalPrice + deliveryCrg - values.salePrice > 0
-        ? totalPrice + deliveryCrg - values?.salePrice
-        : "0";
+    const discount = totalPrice - values.salePrice;
 
-    const dueAmount =
-      values?.salePrice + values?.deliveryCharge - values?.paidAmount;
+    const dueAmount = values?.salePrice + deliveryCrg - values?.paidAmount;
 
     const date = ToDateTimeString();
 
@@ -211,7 +170,7 @@ const AddOrder = ({ onClick }) => {
     await isFailedPlaceOrderHandler(
       dueAmount,
       deliveryCrg,
-      weight,
+      quantity,
       values,
       discount,
       totalPrice,
@@ -229,7 +188,7 @@ const AddOrder = ({ onClick }) => {
 
     router.push("/admin/place-order/id=" + invoice_str);
     setLoading(false);
-    setOrderResponse(null);
+    dispatch(updateSelectedProduct([]));
   };
 
   const sendConfirmationMsg = async (
@@ -280,7 +239,7 @@ const AddOrder = ({ onClick }) => {
   const placeOrderHandler = async (
     data,
     deliveryCrg,
-    weight,
+    quantity,
     values,
     discount,
     totalPrice,
@@ -293,7 +252,7 @@ const AddOrder = ({ onClick }) => {
       consignment_id: data?.consignment.consignment_id,
       tracking_code: data?.consignment.tracking_code,
       deliveryCrg,
-      weight,
+      quantity,
       customer_details: values,
       discount,
       totalPrice,
@@ -309,7 +268,7 @@ const AddOrder = ({ onClick }) => {
   const isFailedPlaceOrderHandler = async (
     dueAmount,
     deliveryCrg,
-    weight,
+    quantity,
     values,
     discount,
     totalPrice,
@@ -318,25 +277,25 @@ const AddOrder = ({ onClick }) => {
     invoice_str,
     timestamp
   ) => {
-    // console.log({
-    //   dueAmount,
-    //   deliveryCrg,
-    //   weight,
-    //   customer_details: values,
-    //   discount,
-    //   totalPrice,
-    //   date,
-    //   order,
-    //   timestamp,
-    //   placeBy: user.name,
-    //   placeById: user.staff_id,
-    //   status: "Pending",
-    // });
+    console.log({
+      dueAmount,
+      deliveryCrg,
+      quantity,
+      customer_details: values,
+      discount,
+      totalPrice,
+      date,
+      order,
+      timestamp,
+      placeBy: user.name,
+      placeById: user.staff_id,
+      status: "Pending",
+    });
 
     await db.collection("placeOrder").doc(invoice_str).set({
       dueAmount,
       deliveryCrg,
-      quantity: weight,
+      quantity,
       customer_details: values,
       discount,
       totalPrice,
@@ -359,6 +318,7 @@ const AddOrder = ({ onClick }) => {
   return (
     <main>
       <div>
+        <h1 className="mb-3 text-lg font-bold text-gray-700 ">Add Order</h1>
         <AppForm
           initialValues={{
             delivery_type: true || "",
@@ -369,40 +329,32 @@ const AddOrder = ({ onClick }) => {
             deliveryCharge: "",
             paidAmount: "",
             courier: "Sundorbon" || "",
-            note: "দয়া করে সাবধানে বহন করবেন। গাছ আইটেম..." || "",
+            note: "",
           }}
           onSubmit={placeOrder}
           validationSchema={validationSchema}
         >
-          <div className="h-screen relative">
-            <div className="w-full">
-              <FormHeader
-                onClick={onClick}
-                title={"Place Order"}
-                sub_title="Add your product and necessary information from here."
-              />
-            </div>
-
-            <div className="w-full h-[75%] md:h-[80%] overflow-y-scroll py-3 px-6 md:px-4 mb-4">
+          <div className="bg-white rounded-lg">
+            <div className="w-full py-3 px-6 md:px-4 mb-4">
               <OrderDetailsForm />
-            </div>
-
-            <div className="fixed bottom-0 right-0 w-full bg-gray-50">
-              <div className="py-5 px-6 md:px-4 max-h-full grid grid-cols-4 gap-4">
-                <div className="col-span-2">
-                  <Button
-                    onClick={onClick}
-                    title="Cancel"
-                    className="bg-red-100 hover:bg-red-200 hover:shadow-lg text-red-600 transition-all duration-300 w-full"
-                  />
-                </div>
-                <div className="col-span-2">
-                  <FormBtn
-                    loading={loading}
-                    onClick={placeOrder}
-                    title="Submit"
-                    className="bg-blue-400 hover:bg-blue-500 hover:shadow-lg text-white transition-all duration-300 w-full"
-                  />
+              <div className="w-full flex justify-end">
+                <div className="grid w-full sm:w-2/3 grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="col-span-1">
+                    <Link href={"/admin/place-order"}>
+                      <Button
+                        title="Cancel"
+                        className="bg-orange-400 w-full hover:bg-orange-500 hover:shadow-lg text-white transition-all duration-300"
+                      />
+                    </Link>
+                  </div>
+                  <div className="col-span-1">
+                    <FormBtn
+                      loading={loading}
+                      onClick={placeOrder}
+                      title="Submit"
+                      className="bg-blue-400 w-full hover:bg-blue-500 hover:shadow-lg text-white transition-all duration-300"
+                    />
+                  </div>
                 </div>
               </div>
             </div>

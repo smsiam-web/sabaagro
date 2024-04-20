@@ -14,6 +14,7 @@ import tempImgReducer from "./slices/tempImgUrl";
 import categoryReducer from "./slices/categorySlice";
 import singleOrderReducer from "./slices/singleOrderSlice";
 import childCategoryReducer from "./slices/childCategorySlice";
+import selectedProductForPlaceOrderReducer from "./slices/selectedProductForPlaceOrderSlice";
 
 export const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ export const store = configureStore({
     category: categoryReducer,
     singleOrder: singleOrderReducer,
     childCategory: childCategoryReducer,
+    selectedProduct: selectedProductForPlaceOrderReducer,
   },
 
   middleware: (curryGetDefaultMiddleware) =>
