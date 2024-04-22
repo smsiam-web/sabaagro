@@ -19,18 +19,20 @@ import { useBarcode } from "next-barcode";
 import { notifications } from "@mantine/notifications";
 import { selectUser } from "@/app/redux/slices/authSlice";
 import Link from "next/link";
+import { selectOrder } from "@/app/redux/slices/orderSlice";
 
 const SearchBy = () => {
-  const [currentValue, setCurrentValue] = useState("RA02");
+  const [currentValue, setCurrentValue] = useState("SA01");
   const [filterOrder, setFilterOrder] = useState(null);
   const [openedd, setOpened] = useState(null);
   const [opened, { open, close }] = useDisclosure(false);
   const user = useSelector(selectUser);
+  const orders = useSelector(selectOrder);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!!opened) return;
-    setCurrentValue("RA02");
+    setCurrentValue("SA01");
     setFilterOrder(null);
   }, [opened]);
 
@@ -88,8 +90,17 @@ const SearchBy = () => {
       ? updateStatus(item, "Processing", item?.id)
       : toggleOpen;
     close();
-    //   console.log(item);
   };
+
+  useEffect(() => {
+    const value = currentValue?.toUpperCase();
+    console.log(value);
+    if (value?.split("0")[0] === "SA" && value.length === 8) {
+      filter(value);
+    }
+  }, [currentValue]);
+
+  console.log(filterOrder);
 
   // // search config
   // useEffect(() => {
@@ -131,13 +142,6 @@ const SearchBy = () => {
 
   //   ss.length ? dispatch(updateOrder(ss)) : dispatch(updateOrder(orders));
   // }, [currentValue]);
-
-  useEffect(() => {
-    const value = currentValue?.toUpperCase();
-    if (value?.split("0")[0] === "RA" && value.length === 6) {
-      filter(value);
-    }
-  }, [currentValue]);
 
   // // onStatus config
   // const onStatusChanged = (e) => {
@@ -234,41 +238,61 @@ const SearchBy = () => {
               </div>
             </div>
             <div className="border-t my-2">
-              {filterOrder &&
-                filterOrder.order.map((item, i) => (
-                  <div key={i}>
-                    <div className="flex justify-between py-1 md:py-1 border-b">
-                      <div>
-                        <h2
-                          className="text-sm sm:text-xl text-title font-mono"
-                          id={`item_0${++i}`}
+              <table className="w-full whitespace-nowrap table-auto border">
+                <thead className="text-base font-semibold tracking-wide text-left  uppercase bg-slate-800 border-slate-800 border-2 text-slate-50">
+                  <tr>
+                    <th className="px-4 py-1 ">SL</th>
+                    <th className="px-4 py-1 ">Item</th>
+                    <th className="px-4 py-1 ">Category</th>
+                    <th className="px-4 py-1 ">Quantity</th>
+                    <th className="px-4 py-1 ">Price</th>
+                    <th className="px-4 py-1 ">Total</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100 ">
+                  <>
+                    {filterOrder &&
+                      filterOrder?.order.map((item, i) => (
+                        <tr
+                          key={i}
+                          className={`${(i + 1) % 2 == 0 && "bg-sub"} px-2`}
                         >
-                          {item.title}
-                        </h2>
-                      </div>
-                      <div className="flex justify-between w-7/12">
-                        <span
-                          className="text-sm sm:text-xl text-title font-mono"
-                          id={`item_0${i}_quantity`}
-                        >
-                          {item.quantity}kg
-                        </span>
-                        <span
-                          className="text-sm sm:text-xl text-title font-mono"
-                          id={`item_0${i}_price`}
-                        >
-                          {item.price}
-                        </span>
-                        <span
-                          className="text-sm sm:text-xl text-title font-mono"
-                          id={`item_0${i}_total_price`}
-                        >
-                          {item.total_price}/-
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                          <td className="px-4 py-1 font-bold">
+                            <span className="text-base">{`0${i + 1}.`}</span>
+                          </td>
+                          <td className="px-4 py-1 font-medium">
+                            <span className="text-base">
+                              {item.product_name}
+                            </span>
+                          </td>
+
+                          <td className="px-4 py-1">
+                            <span className="text-base ">
+                              {item.child_category}
+                            </span>
+                          </td>
+
+                          <td className="px-10 py-1">
+                            <span className="text-base font-semibold ">
+                              {item.quantity}
+                              {item.unit}
+                            </span>
+                          </td>
+                          <td className="px-4 py-1">
+                            <span className="text-base font-semibold ">
+                              {item.sale_price}
+                            </span>
+                          </td>
+                          <td className="px-4 py-1">
+                            <span className="text-base font-semibold ">
+                              {item.total_price}/-
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                  </>
+                </tbody>
+              </table>
             </div>
             <div className="flex justify-between mb-10">
               <div className="flex ">
@@ -281,9 +305,11 @@ const SearchBy = () => {
                   <h2>Sub-Total</h2>
                   <h2>Delivery</h2>
                   <h2>Discount</h2>
+                  <h2>Paid</h2>
                   <h2>Total</h2>
                 </div>
                 <div className="text-sm sm:text-xl text-title font-semibold px-4">
+                  <h2>:</h2>
                   <h2>:</h2>
                   <h2>:</h2>
                   <h2>:</h2>
@@ -293,6 +319,7 @@ const SearchBy = () => {
                   <h2>{filterOrder?.totalPrice}/-</h2>
                   <h2>{filterOrder?.deliveryCrg}/-</h2>
                   <h2>-{filterOrder?.discount}/-</h2>
+                  <h2>-{filterOrder?.customer_details?.paidAmount}/-</h2>
                   <h2>{filterOrder?.customer_details.salePrice}/-</h2>
                 </div>
               </div>

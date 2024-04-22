@@ -225,7 +225,7 @@ const OrderTable = () => {
               <thead className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-200  bg-gray-100">
                 <tr>
                   <th className="px-4 py-3 ">invoice no</th>
-                  <th className="px-4 py-3 ">SFC ID</th>
+                  <th className="px-4 py-3 ">Courier</th>
                   <th className="px-4 py-3 ">NAME</th>
                   <th className="px-4 py-3 ">Phone no.</th>
                   <th className="px-4 py-3 ">Delivery Type</th>
@@ -272,9 +272,7 @@ const OrderTable = () => {
                             <td className="px-4 py-3 font-bold">
                               {/* <Link href={`/admin/place-order/id=${item.id}`}> */}
                               <span className="text-sm">
-                                {item.consignment_id
-                                  ? item.consignment_id
-                                  : "null"}
+                                {item?.customer_details?.courier}
                               </span>
                               {/* </Link> */}
                             </td>

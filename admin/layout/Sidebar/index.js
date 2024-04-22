@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Sidebar.module.css";
 import { useRouter } from "next/router";
 import { menus } from "../../configs";
@@ -7,19 +7,19 @@ import Logo from "@/app/components/shared/Logo";
 import { RxCross1 } from "react-icons/rx";
 
 function Sidebar({ setSidebarActive }) {
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth)
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const router = useRouter();
 
-useEffect(() => {
-  window.addEventListener('resize', ()=> {
-    setScreenWidth(window.innerWidth)
-})
-}, []);
+  useEffect(() => {
+    window.addEventListener("resize", () => {
+      setScreenWidth(window.innerWidth);
+    });
+  }, []);
 
-const toggleMenu = () => {
-  if(screenWidth >= 768) return;
-  setSidebarActive((old) => !old)
-}  
+  const toggleMenu = () => {
+    if (screenWidth >= 768) return;
+    setSidebarActive((old) => !old);
+  };
 
   return (
     <>
@@ -27,7 +27,7 @@ const toggleMenu = () => {
         <div
           className={"items-center justify-between gap-2 mb-8 " + styles.logo}
         >
-          <Logo />
+          {/* <Logo /> */}
           <div
             className={styles.sidebarToggle}
             onClick={() => setSidebarActive((old) => !old)}
@@ -49,9 +49,7 @@ const toggleMenu = () => {
                     ? styles.sidebar__item_active
                     : "")
                 }
-                onClick={() =>
-                  toggleMenu()
-                }
+                onClick={() => toggleMenu()}
               >
                 <div className={styles.sidebar__item_icon_wrapper}>
                   <Icon className={styles.icon} />

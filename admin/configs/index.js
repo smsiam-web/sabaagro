@@ -203,6 +203,10 @@ export const COURIER = [
     id: "Steadfast",
   },
   {
+    name: "Sodagor",
+    id: "Sodagor",
+  },
+  {
     name: "AJR",
     id: "AJR",
   },
