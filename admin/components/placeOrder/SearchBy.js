@@ -94,13 +94,10 @@ const SearchBy = () => {
 
   useEffect(() => {
     const value = currentValue?.toUpperCase();
-    console.log(value);
     if (value?.split("0")[0] === "SA" && value.length === 8) {
       filter(value);
     }
   }, [currentValue]);
-
-  console.log(filterOrder);
 
   // // search config
   // useEffect(() => {

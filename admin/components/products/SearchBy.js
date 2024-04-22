@@ -1,19 +1,9 @@
 import Button from "@/app/components/shared/Button";
 import { AiOutlineAppstoreAdd } from "react-icons/ai";
-import { useDisclosure } from "@mantine/hooks";
 
 import React from "react";
-import AddProduts from "./add_products";
 
 const SearchBy = ({ onClick }) => {
-  // const [opened, setOpened] = useState(false);
-
-  // const open = () => {
-  //   {
-  //     !opened ? setOpened(true) : setOpened(false);
-  //   }
-  // };
-
   return (
     <>
       <div className="min-w-0 rounded-lg overflow-hidden bg-gray-50  shadow-xs  mb-5">

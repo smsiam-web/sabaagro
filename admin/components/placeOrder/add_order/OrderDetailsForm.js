@@ -50,9 +50,11 @@ const OrderDetailsForm = () => {
       let flag;
       for (let prop in product) {
         flag = false;
-        flag = product[prop].toString().indexOf(text) > -1;
+        flag = product[prop]?.toString().indexOf(text) > -1;
+        console.log(product[prop]);
         if (flag) break;
       }
+      console.log(flag);
       return flag;
     });
   }
@@ -71,6 +73,7 @@ const OrderDetailsForm = () => {
     setQuantity(e.target.value);
   };
   const handelChange = (e) => {
+    console.log(e.target.value);
     setValue(e.target.value);
     if (!e.target.value) return setSearchP(null);
     setSearchP(customFilter(products, e.target.value));

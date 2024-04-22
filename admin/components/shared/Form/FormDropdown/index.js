@@ -27,7 +27,7 @@ function FormDropdown({
       .collection("category")
       .doc("childCategory")
       .collection(uid)
-      .orderBy("timestamp", "desc")
+      .orderBy("timestamp", "asc")
       .onSnapshot((snap) => {
         const childCategory = [];
         snap.docs.map((doc) => {
@@ -69,7 +69,7 @@ function FormDropdown({
         <div className={`${styles.dropdown} relative`}>
           <div className={styles.dropdown_header} onClick={toggleDropdown}>
             {selectedItem
-              ? items.find((item) => item.id === selectedItem)?.[label]
+              ? items?.find((item) => item.id === selectedItem)?.[label]
               : placeholder}
 
             <img

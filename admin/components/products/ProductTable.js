@@ -288,9 +288,7 @@ const ProductTable = ({ onClick }) => {
                               label="Edit"
                               color="blue"
                               withArrow
-                              onClick={() =>
-                                dispatch(updateProductId({ id: item.id }))
-                              }
+                              onClick={() => dispatch(updateProductId([item]))}
                             >
                               <span className="cursor-pointer hover:text-blue-400">
                                 <FiEdit size={16} />

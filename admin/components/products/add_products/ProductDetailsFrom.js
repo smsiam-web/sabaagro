@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { selectCategory } from "@/app/redux/slices/categorySlice";
 import { selectChildCategory } from "@/app/redux/slices/childCategorySlice";
 
-const ProductDetailsFrom = () => {
+const ProductDetailsFrom = ({ id, urls }) => {
   const [childCategory, setChildCategory] = useState();
   const Category = useSelector(selectCategory);
   const ChildCategory = useSelector(selectChildCategory);
@@ -33,7 +33,7 @@ const ProductDetailsFrom = () => {
         <label className="block text-gray-500 font-medium text-sm leading-none mb-2">
           Photo
         </label>
-        <FileUpload fileLocation={"products"} passUrl />
+        <FileUpload urls={urls} fileLocation={"products"} passUrl />
       </div>
       <div>
         <span>Product SKU</span>

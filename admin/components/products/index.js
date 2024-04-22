@@ -15,12 +15,11 @@ const Products = () => {
   const dispatch = useDispatch();
 
   // get product ID from redux
-  const ProductID = useSelector(selectUpdateProductId);
-  const ID = ProductID?.id;
+  const Product = useSelector(selectUpdateProductId);
 
   // close drawer and clean productID
   const cleanId = () => {
-    setOpend(false), ID && dispatch(updateProductId(null));
+    setOpend(false), Product && dispatch(updateProductId(null));
   };
 
   // toggle drawer
@@ -29,8 +28,8 @@ const Products = () => {
   };
 
   useEffect(() => {
-    ID && toggleOpen();
-  }, [ID]);
+    Product?.length && toggleOpen();
+  }, [Product]);
 
   return (
     <main className="h-full overflow-y-auto">
@@ -45,7 +44,10 @@ const Products = () => {
           padding={0}
         >
           <div className="">
-            <AddProduts onClick={() => toggleOpen()} />
+            <AddProduts
+              item={Product && Product[0]}
+              onClick={() => toggleOpen()}
+            />
           </div>
         </Drawer>
       </div>
@@ -53,7 +55,7 @@ const Products = () => {
         <h1 className="mb-3 text-lg font-bold text-gray-700 ">Products</h1>
         <SearchBy onClick={() => toggleOpen()} />
         <DropDownload />
-        <ProductTable />
+        <ProductTable onClick={() => toggleOpen()} />
       </div>
     </main>
   );

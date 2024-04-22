@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { updateProductImg } from "@/app/redux/slices/updateProductImg";
 import Image from "next/image";
 
-const FileUpload = ({ fileLocation }) => {
+const FileUpload = ({ fileLocation, urls }) => {
   const [progress, setProgress] = useState(0);
   const [url, setUrl] = useState(null);
   const [File, setFile] = useState(null);
@@ -49,7 +49,7 @@ const FileUpload = ({ fileLocation }) => {
             async () => {
               const urls = await storageRef.getDownloadURL();
               console.log(urls);
-              dispatch(updateProductImg({ urls: urls }));
+              dispatch(updateProductImg([{ urls: urls }]));
 
               setUrl(urls);
             }
@@ -75,27 +75,28 @@ const FileUpload = ({ fileLocation }) => {
           {/* <Dropzone.Accept>accept</Dropzone.Accept>
           <Dropzone.Reject>Reject</Dropzone.Reject> */}
           <Dropzone.Idle>
-            {File ? (
+            {File || urls ? (
               <div className="flex items-center flex-col gap-3">
-                {url ? (
-                      <Image
-                      src={url}
-                      width={260}
-                      height={260}
-                      alt="Picture of the Product"
-                    />
+                {url || urls ? (
+                  <Image
+                    src={url ? url : urls.urls}
+                    width={260}
+                    height={260}
+                    alt="Picture of the Product"
+                  />
                 ) : (
                   <Loader />
                 )}
 
                 <>
                   <label className="label label-info flex items-center gap-2">
-                    Uploaded: <span>{progress}%</span>
-                    {progress === 100 && (
-                      <span className="text-green-600 bg-green-200 p-1 rounded-full">
-                        <MdDone size={14} />
-                      </span>
-                    )}
+                    Uploaded: <span>{urls ? "100" : progress}%</span>
+                    {progress === 100 ||
+                      (urls && (
+                        <span className="text-green-600 bg-green-200 p-1 rounded-full">
+                          <MdDone size={14} />
+                        </span>
+                      ))}
                   </label>
                 </>
               </div>
