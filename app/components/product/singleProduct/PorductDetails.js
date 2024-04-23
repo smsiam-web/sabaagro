@@ -279,7 +279,7 @@ const ProductDetails = ({ disabled }) => {
                   <FaAngleDoubleRight className="text-greens text-xl" />
                   <p className="text-gray-900">
                     <span className="text-sub-title">
-                      যেকোন তথ্য জানতে কল করুন 01313147532
+                      যেকোন তথ্য জানতে কল করুন 01601906197
                     </span>
                   </p>
                 </div>
@@ -320,7 +320,7 @@ const ProductDetails = ({ disabled }) => {
                   Mon - Fri: 7:00 am - 18:00PM
                 </span>
                 <p className="text-xl md:text-2xl font-bold text-title mt-5">
-                  +880 1313-147532
+                  +8801601906197
                 </p>
               </div>
             </div>

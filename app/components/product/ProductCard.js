@@ -16,6 +16,8 @@ import Image from "next/image";
 const ProductCard = ({ product }) => {
   const { id, off_price, productImg, product_details } = product;
 
+  console.log(product);
+
   // redux setup
   const cartItems = useSelector(selectItems);
   const dispatch = useDispatch();
@@ -67,7 +69,7 @@ const ProductCard = ({ product }) => {
       )}
       <div className="rounded-md flex flex-col justify-center overflow-hidden">
         {/* card image  */}
-        <Image width={300} height={300} alt="mango" src={productImg?.urls} />
+        <img alt={product_details.product_name} src={productImg?.urls} />
       </div>
       {/* card text  */}
       <div className="flex flex-col gap-1 w-full mt-2">

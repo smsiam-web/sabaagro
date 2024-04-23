@@ -8,6 +8,7 @@ import Loader from "../shared/Loader";
 const TodaysDeals = () => {
   const Products = useSelector(selectProduct);
   const [loading, setLoading] = useState(false);
+  console.log(Products);
 
   setTimeout(() => {
     setLoading(true);

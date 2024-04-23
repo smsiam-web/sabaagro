@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Card from "../../app/components/home/products/Card";
 import Breadcrumb from "@/app/components/shared/Breadcrumb";
 import { useSelector } from "react-redux";
 import { selectProduct } from "@/app/redux/slices/productSlice";
+import ProductCard from "@/app/components/product/ProductCard";
 
 const Shop = () => {
   const Products = useSelector(selectProduct);
@@ -31,7 +31,7 @@ const Shop = () => {
               <div className="w-full">
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-5 lg:gap-6">
                   {Products &&
-                    Products?.map((i) => <Card item={i} key={i.id} />)}
+                    Products?.map((i) => <ProductCard item={i} key={i.id} />)}
                 </div>
               </div>
             </div>
