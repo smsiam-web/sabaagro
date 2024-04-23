@@ -95,6 +95,7 @@ const ProductCard = ({ product }) => {
         <div className="flex items-center justify-between">
           <div>
             <span className="text-sm tracking-tighter  text-mid">
+              {product_details.slug}
               {product_details.unit}
             </span>
             <div className="flex items-center gap-1">

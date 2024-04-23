@@ -69,7 +69,7 @@ const ProductCard = ({ item = "" }) => {
   };
 
   return (
-    <div className="product-card group box-border overflow-hidden flex rounded-md shadow-sm p flex-col items-center relative bg-white">
+    <div className="product-card group box-border overflow-hidden flex  rounded-md shadow-sm p flex-col items-center relative bg-white">
       <Link href={`/shop/${id}`} onClick={() => updateSinProduct(item)}>
         {/* stock out  */}
         {false && (
@@ -87,7 +87,7 @@ const ProductCard = ({ item = "" }) => {
         <div className="flex flex-col justify-between items-stretch">
           <div className="rounded-md flex flex-col justify-center overflow-hidden max-w-full">
             {/* card image  */}
-            <Image src={productImg?.urls} width={300} height={300} alt="product_img" />
+            <img src={productImg?.urls} alt={product_name} />
           </div>
 
           {/* card text  */}
