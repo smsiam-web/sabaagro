@@ -91,7 +91,7 @@ const ProductDetails = ({ disabled }) => {
             <div className="lg:w-2/5 w-full lg:border-r p-2">
               <img
                 src={productImg?.urls}
-                alt=""
+                alt={product_name}
                 loading="lazy"
                 className="rounded-lg"
               />
@@ -111,6 +111,7 @@ const ProductDetails = ({ disabled }) => {
               </span>
               <div className="my-3">
                 <span className="text-sm text-sub-title mb-2 block">
+                  {slug}
                   {unit}
                 </span>
                 <div className="flex items-center gap-1">
@@ -130,12 +131,7 @@ const ProductDetails = ({ disabled }) => {
                   )}
                 </div>
               </div>
-              <div className="my-5 bg-[#EBFAE9] w-fit px-3 py-2 border border-[#82d45e] rounded-md">
-                Availability:
-                <span className="text-green ml-1 font-bold">
-                  {available_from}
-                </span>
-              </div>
+
               <div className="border-t"></div>
               <AppForm
                 initialValues={{
@@ -147,18 +143,10 @@ const ProductDetails = ({ disabled }) => {
               >
                 <div className="my-5 flex flex-col gap-5">
                   <div className="flex flex-col w-full justify-between gap-5">
-                    <div className="flex flex-col">
-                      <span className="text-sm pb-2 block text-sub-title">
-                        আমের পরিমানঃ
-                      </span>
-                      <div className="-my-4">
-                        <QuantityFrom />
-                      </div>
-                    </div>
                     {/* <Quantity /> */}
                     <div className="flex flex-col">
                       <span className="text-sm pb-2 block text-sub-title">
-                        ক্যারেট সংখ্যাঃ
+                        পরিমানঃ
                       </span>
                       <div className="flex justify-between border rounded-md">
                         <button className="bg-[#f5f5f5] font-bold px-3 py-3 hover-primary text-sub-title">

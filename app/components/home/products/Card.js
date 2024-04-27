@@ -15,16 +15,12 @@ import { notifications } from "@mantine/notifications";
 import { updateSingleProduct } from "@/app/redux/slices/singleProduct";
 
 const ProductCard = ({ item = "" }) => {
-  const { id, productImg, product_details } = item || "";
+  const { id, productImg, product_details, off_price } = item || "";
 
-  const {
-    available_from,
-    product_name,
-    product_type,
-    price,
-    sale_price,
-    unit,
-  } = product_details || "";
+  const { slug, product_name, product_type, price, sale_price, unit } =
+    product_details || "";
+
+  console.log(item);
 
   // redux setup
   const cartItems = useSelector(selectItems);
@@ -81,21 +77,25 @@ const ProductCard = ({ item = "" }) => {
         {/* disscunt %  */}
         {true && true && (
           <span className="absolute top-2 left-2 bg-orange px-2 mb-2 py-1 text-xs sm:text-sm font-bold text-slate-100 rounded-md bg-primary">
-            10% Off
+            {off_price}% Off
           </span>
         )}
-        <div className="flex flex-col justify-between items-stretch">
-          <div className="rounded-md flex flex-col justify-center overflow-hidden max-w-full">
+        <div className="flex flex-col justify-between">
+          <div className="rounded-md flex flex-col justify-center overflow-hidden w-full h-[180px] sm:h-[280px] object-cover">
             {/* card image  */}
-            <img src={productImg?.urls} alt={product_name} />
+            <img
+              src={productImg?.urls}
+              className="object-cover w-full h-full"
+              alt={product_name}
+            />
           </div>
 
           {/* card text  */}
-          <div className="flex flex-col gap-1 w-full mt-2 ">
-            <h3 className="text-xs sm:text-sm font-semibold text-mid">
+          <div className="flex flex-col gap-1 w-full mt-2">
+            <h3 className="text-[10px] sm:text-sm font-semibold text-mid">
               {product_type}
             </h3>
-            <h1 className="text-base font-semibold text-title truncate">
+            <h1 className="text-xs sm:text-base font-semibold text-title truncate">
               {product_name}
             </h1>
             <div className="flex flex-wrap items-center gap-1">
@@ -105,15 +105,10 @@ const ProductCard = ({ item = "" }) => {
               <span className="text-sub-mid text-xs sm:text-sm">3.5/5</span>
               <span className="text-sub-title text-xs sm:text-sm">(169)</span>
             </div>
-            <div className="flex items-center gap-1  w-fit my-1">
-              <span className="text-xs bg-green-100 px-3 py-1 rounded-full text-green-600">
-                Available:
-              </span>
-              <span className="text-xs">{available_from}.</span>
-            </div>
             <div className="flex items-center justify-between">
               <div>
                 <span className="text-xs sm:text-sm tracking-tighter text-mid">
+                  {slug}
                   {unit}
                 </span>
                 <div className="flex items-center gap-1">
