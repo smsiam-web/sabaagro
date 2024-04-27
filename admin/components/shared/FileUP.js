@@ -78,10 +78,9 @@ const FileUpload = ({ fileLocation, urls }) => {
             {File || urls ? (
               <div className="flex items-center flex-col gap-3">
                 {url || urls ? (
-                  <Image
+                  <img
                     src={url ? url : urls.urls}
-                    width={260}
-                    height={260}
+                    className="w-60 h-auto object-cover"
                     alt="Picture of the Product"
                   />
                 ) : (
